@@ -2,3 +2,6 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
+
+  App\Core\Domain\Clock:
+    class: App\Core\Domain\Clock\TestClock

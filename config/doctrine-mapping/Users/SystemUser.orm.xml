@@ -3,18 +3,25 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="App\Users\Domain\SystemUser" table="users">
+    <entity name="App\Users\Domain\SystemUser" table="users" inheritance-type="SINGLE_TABLE">
         <id name="id" type="uuid" column="id">
             <generator strategy="NONE"/>
         </id>
 
+        <field name="email" type="email"/>
+        <field name="password" column="password"/>
         <field name="firstName" column="first_name"/>
         <field name="lastName" column="last_name"/>
-        <field name="pesel" type="pesel" column="pesel"/>
-        <field name="email" type="email"/>
         <field name="createdAt" type="datetime_immutable" column="created_at"/>
         <field name="createdBy" type="uuid" column="created_by"/>
         <field name="updatedAt" type="datetime_immutable" column="updated_at"/>
         <field name="updatedBy" type="uuid" column="updated_by"/>
+
+        <discriminator-column name="role" type="string"/>
+        <discriminator-map>
+            <discriminator-mapping value="patient" class="App\Users\Domain\Patient"/>
+            <discriminator-mapping value="lab_worker" class="App\Users\Domain\LaboratoryWorker"/>
+            <discriminator-mapping value="sys_admin" class="App\Users\Domain\SystemAdmin"/>
+        </discriminator-map>
     </entity>
 </doctrine-mapping>
