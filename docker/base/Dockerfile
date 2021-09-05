@@ -1,15 +1,12 @@
-FROM php:8.0.3-apache-buster AS med-tester-api-base
+FROM php:8.0.9-apache-buster as medtester-api-base
 
-WORKDIR /var/www/med-tester-api/
-
-RUN a2enmod rewrite
-
-RUN apt-get update && apt-get install -y git unzip libicu-dev libpq-dev libzip-dev zip && docker-php-ext-install zip
-
+RUN apt-get -y update && apt-get -y upgrade && apt-get -y install git bash libpq-dev libzip-dev unzip
 RUN docker-php-ext-install pdo pdo_pgsql
+RUN groupadd --gid 1000 medtester-api \
+  && useradd --uid 1000 --gid medtester-api --shell /bin/bash --create-home medtester-api
 
-RUN docker-php-ext-install \
-    opcache \
-    intl
+RUN docker-php-ext-install opcache zip
 
-COPY --from=composer:2.0.12 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.1.5 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /home/medtester-api/project

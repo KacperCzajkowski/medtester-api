@@ -1,21 +1,29 @@
-version: '3.7'
+version: '3.8'
+
 services:
   base:
     build:
-      context: ./docker/base
-    image: med-tester-api-base
-
-  app:
+      context: ./
+      dockerfile: docker/base/Dockerfile
+    image: medtester-api-base
+  application:
     build:
-      context: ./docker/dev
-    image: med-tester-api-dev
-    ports:
-      - "8080:80"
+      context: ./
+      dockerfile: docker/dev/Dockerfile
+    image: medtester-api-backend
     volumes:
-      - .:/var/www/med-tester-api
-
+      - ./docker/dev/vhost.conf:/etc/apache2/sites-enabled/000-default.conf
+      - .:/home/medtester-api/project
+    ports:
+      - "80"
+      - "8000"
+    networks:
+      - default
+      - nginx-proxy
+    environment:
+      - VIRTUAL_HOST=api.medtester.dev
   database:
-    image: 'postgres:13.2-alpine'
+    image: 'postgres:13.4-alpine'
     environment:
       POSTGRES_PASSWORD: main
       POSTGRES_USER: main
@@ -25,10 +33,42 @@ services:
       # For example, to allow the host to connect to port 3306 on the container, you would change
       # "3306" to "3306:3306". Where the first port is exposed to the host and the second is the container port.
       # See https://docs.docker.com/compose/compose-file/#ports for more information.
-      - "5432:5432"
+      - '5433:5432'
     volumes:
-      - med-tester-api-postgresql:/var/lib/postgresql/data
-
+      - medtester-api-postgresql:/var/lib/postgresql/data
+    networks:
+      - default
+      - nginx-proxy
+  mkcert:
+    image: aegypius/mkcert-for-nginx-proxy
+    volumes:
+      - medtester-api-ssl-certs:/app/certs:rw
+      - ~/.mozilla/firefox:/root/.mozilla/firefox:rw
+      - ~/.pki/nssdb:/root/.pki/nssdb:rw
+      - ${CA_STORE:-/usr/local/share/ca-certificates}:/usr/local/share/ca-certificates
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - default
+      - nginx-proxy
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    labels:
+      com.github.aegypius.mkcert-for-nginx-proxy.nginx_proxy: ''
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - medtester-api-ssl-certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - default
+      - nginx-proxy
 volumes:
-  med-tester-api-postgresql:
+  medtester-api-postgresql:
     external: true
+  medtester-api-ssl-certs: {}
+
+networks:
+  nginx-proxy:
+    external:
+      name: nginx-proxy
