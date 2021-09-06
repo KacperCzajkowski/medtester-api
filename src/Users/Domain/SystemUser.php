@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Users\Domain;
 
-use Pesel\Pesel;
+use App\Core\Domain\Email;
 use Symfony\Component\Uid\UuidV4;
 
-class SystemUser
+abstract class SystemUser
 {
     private ?string $password;
 
@@ -13,11 +15,16 @@ class SystemUser
         private UuidV4 $id,
         private string $firstName,
         private string $lastName,
-        private Pesel $pesel,
-        private string $email,
+        private Email $email,
         private \DateTimeImmutable $createdAt,
         private UuidV4 $createdBy,
         private \DateTimeImmutable $updatedAt,
         private UuidV4 $updatedBy
-    ) {}
+    ) {
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
 }

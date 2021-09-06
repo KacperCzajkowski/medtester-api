@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Domain\DoctrineTypes;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -21,7 +23,7 @@ class PeselType extends Type
     }
 
     /**
-     * @param Pesel | null $value
+     * @param Pesel|null $value
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {

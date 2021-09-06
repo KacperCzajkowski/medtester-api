@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Domain;
 
 use Egulias\EmailValidator\EmailValidator;
@@ -63,4 +65,3 @@ final class Email implements \JsonSerializable
         return $this->email === $secondEmail->value();
     }
 }
-
