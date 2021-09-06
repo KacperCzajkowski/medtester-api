@@ -29,7 +29,7 @@ class AppFixtures extends Fixture
             $lastName = 'Czajkowski',
             $password = 'test1234',
             $email = 'kacper@kacper.pl',
-            SystemId::generateNew()->toRfc4122(),
+            SystemId::asString(),
             $pesel = '62100784114',
             $gender = 'male'
         ));
@@ -40,7 +40,7 @@ class AppFixtures extends Fixture
             $lastName = 'Czajkowski',
             $password = 'test1234',
             $email = 'krystyna@krystyna.pl',
-            SystemId::generateNew()->toRfc4122(),
+            SystemId::asString(),
             $pesel = '95102971668',
             $gender = 'female'
         ));
@@ -51,7 +51,7 @@ class AppFixtures extends Fixture
             $lastName = 'Jakistamski',
             $password = 'test1234',
             $email = 'karol@karol.pl',
-            SystemId::generateNew()->toRfc4122(),
+            SystemId::asString(),
             $pesel = '95022694252',
             $gender = 'male'
         ));
@@ -62,7 +62,7 @@ class AppFixtures extends Fixture
             $lastName = 'Jakastamska',
             $password = 'test1234',
             $email = 'kamila@kamila.pl',
-            SystemId::generateNew()->toRfc4122(),
+            SystemId::asString(),
             $pesel = '61050145123',
             $gender = 'female'
         ));
@@ -73,7 +73,7 @@ class AppFixtures extends Fixture
             $lastName = 'Turbokozacki',
             $password = 'test1234',
             $email = 'marcel@marcel.pl',
-            SystemId::generateNew()->toRfc4122(),
+            SystemId::asString(),
             $pesel = '70111012193',
             $gender = 'male'
         ));

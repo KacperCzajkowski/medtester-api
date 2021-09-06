@@ -7,9 +7,9 @@ namespace App\Users\Domain;
 use App\Core\Domain\Email;
 use Symfony\Component\Uid\UuidV4;
 
-class SystemUser
+abstract class SystemUser
 {
-    private string $password;
+    private ?string $password;
 
     public function __construct(
         private UuidV4 $id,
