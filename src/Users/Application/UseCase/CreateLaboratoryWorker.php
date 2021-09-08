@@ -20,10 +20,7 @@ class CreateLaboratoryWorker implements MessageHandlerInterface
 
     public function __invoke(CreateLaboratoryWorker\Command $command): void
     {
-        $exists = $this->workers->findLaboratoryWorkerByEmailAndLaboratoryId(
-            $command->email(),
-            $command->laboratoryId()
-        );
+        $exists = $this->workers->findWorkerByEmail($command->email());
 
         if ($exists) {
             throw new EmailAlreadyUsedException($command->email());

@@ -8,7 +8,7 @@ use Symfony\Component\Uid\UuidV4;
 
 interface LaboratoryWorkersRepository
 {
-    public function findLaboratoryWorkerByEmailAndLaboratoryId(Email $email, UuidV4 $laboratoryId): ?LaboratoryWorker;
+    public function findWorkerByEmail(Email $email): ?LaboratoryWorker;
 
     public function addWorker(LaboratoryWorker $worker): void;
 }

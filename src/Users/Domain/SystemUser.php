@@ -27,4 +27,19 @@ abstract class SystemUser
     {
         $this->password = $password;
     }
+
+    public function password(): string
+    {
+        return $this->password;
+    }
+
+    public function id(): UuidV4
+    {
+        return $this->id;
+    }
+
+    public function email(): Email
+    {
+        return $this->email;
+    }
 }
