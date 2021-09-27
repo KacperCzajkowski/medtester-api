@@ -16,12 +16,17 @@ class SystemAdminRepository implements SystemAdminRepositoryInterface
     ) {
     }
 
-    public function findUserByEmail(Email $email)
+    public function findUserByEmail(Email $email): ?SystemAdmin
     {
         return $this->managerRegistry
             ->getRepository(SystemAdmin::class)
             ->findOneBy([
                 'email' => $email
             ]);
+    }
+
+    public function addAdmin(SystemAdmin $admin): void
+    {
+        $this->managerRegistry->getManagerForClass(SystemAdmin::class)->persist($admin);
     }
 }
