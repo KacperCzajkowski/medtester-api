@@ -14,7 +14,6 @@ class Command
         private string $id,
         private string $firstName,
         private string $lastName,
-        private string $password,
         private string $email,
         private string $createdBy,
         private string $laboratoryId
@@ -49,10 +48,5 @@ class Command
     public function laboratoryId(): UuidV4
     {
         return new UuidV4($this->laboratoryId);
-    }
-
-    public function password(): string
-    {
-        return $this->password;
     }
 }

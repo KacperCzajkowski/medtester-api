@@ -6,14 +6,18 @@ namespace App\Users\Application\UseCase;
 
 use App\Core\Domain\Clock;
 use App\Core\Domain\Exceptions\EmailAlreadyUsedException;
+use App\Security\User;
 use App\Users\Domain\Patient;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class CreatePatient implements MessageHandlerInterface
 {
     public function __construct(
         private PatientRepository $patientRepository,
-        private Clock $clock
+        private Clock $clock,
+        private PasswordGenerator $passwordGenerator,
+        private UserPasswordHasherInterface $passwordHasher
     ) {
     }
 
@@ -38,7 +42,11 @@ class CreatePatient implements MessageHandlerInterface
             $command->gender()
         );
 
-        $patient->setPassword($command->password());
+        $password = $this->passwordGenerator->getNew();
+
+        $patient->setPassword(
+            $this->passwordHasher->hashPassword(new User($patient), $password)
+        );
 
         $this->patientRepository->addPatient($patient);
     }

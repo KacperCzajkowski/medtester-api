@@ -7,30 +7,29 @@ namespace App\Users\Application\UseCase;
 use App\Core\Domain\Clock;
 use App\Core\Domain\Exceptions\EmailAlreadyUsedException;
 use App\Security\User;
-use App\Users\Domain\LaboratoryWorker;
-use App\Users\Domain\Patient;
+use App\Users\Domain\SystemAdmin;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class CreateLaboratoryWorker implements MessageHandlerInterface
+class CreateSystemAdmin implements MessageHandlerInterface
 {
     public function __construct(
-        private LaboratoryWorkersRepository $workers,
+        private SystemAdminRepository $systemAdminRepository,
         private Clock $clock,
         private PasswordGenerator $passwordGenerator,
         private UserPasswordHasherInterface $passwordHasher
     ) {
     }
 
-    public function __invoke(CreateLaboratoryWorker\Command $command): void
+    public function __invoke(CreateSystemAdmin\Command $command): void
     {
-        $exists = $this->workers->findWorkerByEmail($command->email());
+        $exists = $this->systemAdminRepository->findUserByEmail($command->email());
 
         if ($exists) {
             throw new EmailAlreadyUsedException($command->email());
         }
 
-        $worker = new LaboratoryWorker(
+        $admin = new SystemAdmin(
             $command->id(),
             $command->firstName(),
             $command->lastName(),
@@ -39,15 +38,14 @@ class CreateLaboratoryWorker implements MessageHandlerInterface
             $command->createdBy(),
             $this->clock->currentDateTime(),
             $command->createdBy(),
-            $command->laboratoryId()
         );
 
         $password = $this->passwordGenerator->getNew();
 
-        $worker->setPassword(
-            $this->passwordHasher->hashPassword(new User($worker), $password)
+        $admin->setPassword(
+            $this->passwordHasher->hashPassword(new User($admin), $password)
         );
 
-        $this->workers->addWorker($worker);
+        $this->systemAdminRepository->addAdmin($admin);
     }
 }

@@ -20,13 +20,12 @@ class LaboratoryWorkersRepository implements LaboratoryWorkersRepositoryInterfac
     ) {
     }
 
-    public function findLaboratoryWorkerByEmailAndLaboratoryId(Email $email, UuidV4 $laboratoryId): ?LaboratoryWorker
+    public function findWorkerByEmail(Email $email): ?LaboratoryWorker
     {
         return $this->managerRegistry
             ->getRepository(LaboratoryWorker::class)
             ->findOneBy([
                 'email' => $email,
-                'laboratoryId' => $laboratoryId
             ]);
     }
 
