@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\Users\Domain\User" table="users">
+        <id name="id" type="uuid" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="email" type="email"/>
+        <field name="password" column="password"/>
+        <field name="firstName" column="first_name"/>
+        <field name="lastName" column="last_name"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+        <field name="createdBy" type="uuid" column="created_by"/>
+        <field name="updatedAt" type="datetime_immutable" column="updated_at"/>
+        <field name="updatedBy" type="uuid" column="updated_by"/>
+        <field name="roles" type="json_array" column="roles"/>
+        <field name="pesel" type="pesel"/>
+        <field name="gender"/>
+        <field name="laboratoryId" type="uuid" column="laboratory_id" nullable="true"/>
+    </entity>
+</doctrine-mapping>

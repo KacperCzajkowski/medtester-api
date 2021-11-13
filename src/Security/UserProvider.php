@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Security;
 
 use App\Core\Domain\Email;
-use App\Users\Application\UseCase\LaboratoryWorkersRepository;
-use App\Users\Application\UseCase\PatientRepository;
-use App\Users\Application\UseCase\SystemAdminRepository;
+use App\Users\Domain\UserRepository;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -17,10 +15,9 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class UserProvider implements UserProviderInterface
 {
     public function __construct(
-        private PatientRepository $patients,
-        private LaboratoryWorkersRepository $workers,
-        private SystemAdminRepository $admins
-    ) { }
+        private UserRepository $userRepository
+    ) {
+    }
 
     /**
      * Loads the user for the given username.
@@ -39,19 +36,7 @@ class UserProvider implements UserProviderInterface
         try {
             $email = new Email($username);
 
-            $user = $this->admins->findUserByEmail($email);
-
-            if ($user) {
-                return new User($user);
-            }
-
-            $user = $this->workers->findWorkerByEmail($email);
-
-            if ($user) {
-                return new User($user);
-            }
-
-            $user = $this->patients->findPatientByEmail($email);
+            $user = $this->userRepository->findUserByEmail($email);
 
             if ($user) {
                 return new User($user);

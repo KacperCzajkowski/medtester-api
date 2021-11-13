@@ -1,16 +1,26 @@
 default:
+    gherkin:
+        filters:
+            tags: ~@wip
     suites:
         default:
             contexts:
-                - App\Tests\Behat\DemoContext
+                - App\Behat\FeatureContext
+                - behatch:context:browser
+                - behatch:context:system
+                - behatch:context:json
+                - behatch:context:table
+                - behatch:context:rest
+                - behatch:context:xml
 
     extensions:
-            FriendsOfBehat\SymfonyExtension:
-                bootstrap: features/bootstrap/bootstrap.php
-                kernel:
-                    environment: test
-            Behat\MinkExtension:
-                base_url: http://localhost/
-                sessions:
-                    default:
-                        symfony: ~
+        FriendsOfBehat\SymfonyExtension:
+            bootstrap: features/bootstrap/bootstrap.php
+            kernel:
+                environment: test
+        Behat\MinkExtension:
+            base_url: http://localhost/
+            sessions:
+                default:
+                    symfony: ~
+        Behatch\Extension: ~

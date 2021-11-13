@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Mailer;
+
+use App\Core\Domain\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
+
+class SymfonyMailerClient implements MailingClient
+{
+    public function __construct(private MailerInterface $mailer)
+    {
+    }
+
+    public function sendTemplatedEmail(TemplatedEmailSchema $schema): void
+    {
+        $email = (new TemplatedEmail())
+            ->from($schema->from()->value())
+            ->to(...array_map(static fn (Email $email) => $email->value(), $schema->to()))
+            ->subject($schema->subject())
+            ->htmlTemplate($schema->properties()->path())
+            ->context($schema->properties()->params());
+
+        foreach ($schema->attachmentsUrl() as $url) {
+            $email = $email->attachFromPath($url);
+        }
+
+        $this->mailer->send($email);
+    }
+}

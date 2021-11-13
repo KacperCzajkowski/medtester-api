@@ -29,7 +29,7 @@ phpcsfixer:
 phpcsfixer_fix:
 	docker-compose exec application php -dmemory_limit=-1 vendor/bin/php-cs-fixer --allow-risky=yes --no-interaction --ansi fix
 psalm:
-	${EXEC_COMMAND} vendor/bin/psalm
+	${EXEC_COMMAND} vendor/bin/psalm --no-cache
 check: ## run QA checks
 check: psalm phpcsfixer
 phpunit:

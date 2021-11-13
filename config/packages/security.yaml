@@ -5,6 +5,9 @@ security:
     encoders:
         App\Security\User: auto
         Symfony\Component\Security\Core\User\User: auto
+    role_hierarchy:
+        ROLE_SYSTEM_ADMIN: [ ROLE_LABORATORY_WORKER ]
+        ROLE_LABORATORY_WORKER: [ ROLE_PATIENT ]
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -19,5 +22,7 @@ security:
                 check_path: /login
 
     access_control:
+        - { path: ^/admin, roles: ROLE_SYSTEM_ADMIN }
+        - { path: ^/lab-worker, roles: ROLE_LABORATORY_WORKER }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: ROLE_CLIENT_USER }

@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace App\Security;
 
-use App\Users\Domain\LaboratoryWorker;
-use App\Users\Domain\Patient;
-use App\Users\Domain\SystemAdmin;
-use App\Users\Domain\SystemUser;
+use App\Users\Domain\User as DomainUser;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -15,28 +12,16 @@ use Symfony\Component\Uid\UuidV4;
 
 class User implements UserInterface, EquatableInterface, \JsonSerializable, PasswordAuthenticatedUserInterface
 {
-    private SystemUser $user;
+    private DomainUser $user;
 
-    public function __construct(SystemUser $user)
+    public function __construct(DomainUser $user)
     {
         $this->user = $user;
     }
 
     public function getRoles()
     {
-        if ($this->user instanceof Patient) {
-            return ['ROLE_PATIENT'];
-        }
-
-        if ($this->user instanceof LaboratoryWorker) {
-            return ['ROLE_WORKER'];
-        }
-
-        if ($this->user instanceof SystemAdmin) {
-            return ['ROLE_ADMIN'];
-        }
-
-        return ['ROLE_PATIENT'];
+        return $this->user->roles();
     }
 
     public function getPassword(): ?string
@@ -104,5 +89,12 @@ class User implements UserInterface, EquatableInterface, \JsonSerializable, Pass
     public function getUserIdentifier(): string
     {
         return $this->getUsername();
+    }
+
+    public function hasRole(string $roleToFind): bool
+    {
+        $result = array_filter($this->getRoles(), static fn (string $role): bool => $role === $roleToFind);
+
+        return !empty($result);
     }
 }

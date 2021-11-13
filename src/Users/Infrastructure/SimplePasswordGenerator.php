@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Users\Infrastructure;
 
 use App\Users\Application\UseCase\PasswordGenerator;
@@ -13,10 +15,11 @@ class SimplePasswordGenerator implements PasswordGenerator
     {
         $pass = [];
         $alphaLength = strlen(self::ALPHABET) - 1;
-        for ($i = 0; $i < self::PASSWORD_LENGTH; $i++) {
-            $n = rand(0, $alphaLength);
+        for ($i = 0; $i < self::PASSWORD_LENGTH; ++$i) {
+            $n = random_int(0, $alphaLength);
             $pass[] = self::ALPHABET[$n];
         }
+
         return implode($pass);
     }
 }

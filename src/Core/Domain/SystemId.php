@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Domain;
 
-use Exception;
 use Symfony\Component\Uid\UuidV4;
 
 final class SystemId
