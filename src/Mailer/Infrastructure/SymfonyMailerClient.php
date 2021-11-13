@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Mailer;
+namespace App\Mailer\Infrastructure;
 
 use App\Core\Domain\Email;
+use App\Mailer\Application\MailingClient;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 
@@ -18,7 +19,7 @@ class SymfonyMailerClient implements MailingClient
     {
         $email = (new TemplatedEmail())
             ->from($schema->from()->value())
-            ->to(...array_map(static fn (Email $email) => $email->value(), $schema->to()))
+            ->to(...array_map(static fn(Email $email) => $email->value(), $schema->to()))
             ->subject($schema->subject())
             ->htmlTemplate($schema->properties()->path())
             ->context($schema->properties()->params());

@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Mailer;
+namespace App\Mailer\Application;
+
+use App\Mailer\Infrastructure\TemplatedEmailSchema;
 
 interface MailingClient
 {

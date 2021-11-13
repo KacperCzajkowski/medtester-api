@@ -6,6 +6,7 @@ namespace App\Users\Application\UseCase;
 
 use App\Core\Domain\Clock;
 use App\Core\Domain\Exceptions\EmailAlreadyUsedException;
+use App\Mailer\Application\EmailSender;
 use App\Security\User;
 use App\Users\Application\Exception\IllegalArgumentException;
 use App\Users\Domain\User as DomainUser;
@@ -19,7 +20,8 @@ class CreateUser implements MessageHandlerInterface
         private UserRepository $userRepository,
         private Clock $clock,
         private PasswordGenerator $passwordGenerator,
-        private UserPasswordHasherInterface $passwordHasher
+        private UserPasswordHasherInterface $passwordHasher,
+        private EmailSender $emailSender
     ) {
     }
 
@@ -62,5 +64,7 @@ class CreateUser implements MessageHandlerInterface
         );
 
         $this->userRepository->addUser($newUser);
+
+        $this->emailSender->sendEmailWithNewPassword($command->email(), $command->firstName(), $password);
     }
 }

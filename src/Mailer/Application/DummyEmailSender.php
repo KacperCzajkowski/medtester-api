@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Mailer;
+namespace App\Mailer\Application;
 
 use App\Core\Domain\Email;
+use App\Mailer\Infrastructure\TemplatedEmailSchema;
+use App\Mailer\Infrastructure\TemplateProperties;
 
 class DummyEmailSender implements EmailSender
 {
@@ -14,13 +16,16 @@ class DummyEmailSender implements EmailSender
     ) {
     }
 
-    public function sendEmailWithNewEmail(Email $emailTo): void
+    public function sendEmailWithNewPassword(Email $emailTo, string $firstName, string $newPassword): void
     {
         $schema = new TemplatedEmailSchema(
             $from = new Email($this->senderEmail),
-            $to = [new Email('test@test.pl')],
+            $to = [$emailTo],
             $subject = 'Witamy w platformie',
-            new TemplateProperties('url', [])
+            new TemplateProperties('createAccount.html.twig', [
+                'userFirstName' => $firstName,
+                'newPassword' => $newPassword
+            ])
         );
 
         $this->client->sendTemplatedEmail($schema);

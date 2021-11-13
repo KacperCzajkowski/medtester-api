@@ -44,7 +44,7 @@ class UserProvider implements UserProviderInterface
 
             throw new UserNotFoundException();
         } catch (UserNotFoundException $e) {
-            throw new UsernameNotFoundException(sprintf('%s not found', $username));
+            throw new UserNotFoundException(sprintf('%s not found', $username));
         }
     }
 

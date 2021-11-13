@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Mailer;
+namespace App\Mailer\Infrastructure;
 
 use App\Core\Domain\Email;
 

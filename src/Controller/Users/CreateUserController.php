@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller\Users;
 
+use App\Core\Domain\Email;
 use App\Core\Domain\Exceptions\EmailAlreadyUsedException;
+use App\Mailer\Application\Application\Application\EmailSender;
 use App\Security\User;
 use App\Users\Application\Exception\IllegalArgumentException;
 use App\Users\Application\UseCase\CreateUser;
