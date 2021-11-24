@@ -24,5 +24,6 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_SYSTEM_ADMIN }
         - { path: ^/lab-worker, roles: ROLE_LABORATORY_WORKER }
+        - { path: ^/current-user, roles: ROLE_PATIENT }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: ROLE_CLIENT_USER }
+        - { path: ^/, roles: ROLE_PATIENT }

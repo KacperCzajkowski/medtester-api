@@ -105,37 +105,11 @@ class FeatureContext extends MinkContext
      */
     public function thereAreLaboratoryWorkersIsSystem(TableNode $table): void
     {
-        /**
-         * @var ObjectManager $manager
-         */
-        $manager = $this->managerRegistry->getManagerForClass(User::class);
-
         foreach ($table->getHash() as $hash) {
-            $command = new CreateUser\Command(
-                UuidV4::fromString($hash['id']),
-                $hash['firstName'],
-                $hash['lastName'],
-                $hash['email'],
-                [User::ROLES['ROLE_LABORATORY_WORKER']],
-                UuidV4::fromString($hash['createdBy']),
-                $hash['pesel'],
-                $hash['gender']
-            );
-
-            $command->setLaboratoryId(UuidV4::fromString($hash['laboratoryId']));
-
-            $this->messageBus->dispatch($command);
-
-            /**
-             * @var User $user
-             */
-            $user = $this->userRepository->findUserByEmail(new Email($hash['email']));
-
-            $user->setPassword(self::DEFAULT_PASSWORD);
-            $manager->persist($user);
+            $this->createUserFromHashWithSpecifiedRole($hash, User::ROLES['ROLE_LABORATORY_WORKER']);
         }
 
-        $manager->flush();
+        $this->usersManager()->flush();
     }
 
     /**
@@ -143,35 +117,23 @@ class FeatureContext extends MinkContext
      */
     public function thereAreAdminsInSystem(TableNode $table): void
     {
-        /**
-         * @var ObjectManager $manager
-         */
-        $manager = $this->managerRegistry->getManagerForClass(User::class);
-
         foreach ($table->getHash() as $hash) {
-            $command = new CreateUser\Command(
-                UuidV4::fromString($hash['id']),
-                $hash['firstName'],
-                $hash['lastName'],
-                $hash['email'],
-                [User::ROLES['ROLE_SYSTEM_ADMIN']],
-                SystemId::asUuidV4(),
-                $hash['pesel'],
-                $hash['gender']
-            );
-
-            $this->messageBus->dispatch($command);
-
-            /**
-             * @var User $user
-             */
-            $user = $this->userRepository->findUserByEmail(new Email($hash['email']));
-
-            $user->setPassword(self::DEFAULT_PASSWORD);
-            $manager->persist($user);
+            $this->createUserFromHashWithSpecifiedRole($hash, User::ROLES['ROLE_SYSTEM_ADMIN']);
         }
 
-        $manager->flush();
+        $this->usersManager()->flush();
+    }
+
+    /**
+     * @Given /^there are patients in system:$/
+     */
+    public function thereArePatientsInSystem(TableNode $table)
+    {
+        foreach ($table->getHash() as $hash) {
+            $this->createUserFromHashWithSpecifiedRole($hash, User::ROLES['ROLE_PATIENT']);
+        }
+
+        $this->usersManager()->flush();
     }
 
     private function connection(): Connection
@@ -182,5 +144,43 @@ class FeatureContext extends MinkContext
         $connection = $this->managerRegistry->getConnection();
 
         return $connection;
+    }
+
+    private function createUserFromHashWithSpecifiedRole(mixed $hash, string $role): void
+    {
+        $command = new CreateUser\Command(
+            UuidV4::fromString($hash['id']),
+            $hash['firstName'],
+            $hash['lastName'],
+            $hash['email'],
+            [$role],
+            array_key_exists('createdBy', $hash) ? UuidV4::fromString($hash['createdBy']) : SystemId::asUuidV4(),
+            $hash['pesel'],
+            $hash['gender']
+        );
+
+        if (array_key_exists('laboratoryId', $hash)) {
+            $command->setLaboratoryId(UuidV4::fromString($hash['laboratoryId']));
+        }
+
+        $this->messageBus->dispatch($command);
+
+        /**
+         * @var User $user
+         */
+        $user = $this->userRepository->findUserByEmail(new Email($hash['email']));
+
+        $user->setPassword(self::DEFAULT_PASSWORD);
+        $this->usersManager()->persist($user);
+    }
+
+    private function usersManager(): ObjectManager
+    {
+        /**
+         * @var ObjectManager $manager
+         */
+        $manager = $this->managerRegistry->getManagerForClass(User::class);
+
+        return $manager;
     }
 }

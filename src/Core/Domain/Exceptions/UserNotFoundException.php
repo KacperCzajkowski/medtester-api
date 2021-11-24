@@ -8,8 +8,10 @@ use Symfony\Component\Uid\UuidV4;
 
 class UserNotFoundException extends \Exception
 {
-    public function __construct(UuidV4 $uuid)
+    public static function byId(UuidV4 $id): UserNotFoundException
     {
-        parent::__construct(sprintf('User with id %s was not found', $uuid->toRfc4122()));
+        return new UserNotFoundException(
+            sprintf('User with id %s was not found', $id->toRfc4122())
+        );
     }
 }

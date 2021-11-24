@@ -9,6 +9,7 @@ use App\Users\Domain\User;
 use App\Users\Domain\UserRepository as UserRepositoryInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Uid\UuidV4;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -31,5 +32,10 @@ class UserRepository implements UserRepositoryInterface
         $manager = $this->manager->getManagerForClass(User::class);
 
         $manager->persist($user);
+    }
+
+    public function findUserById(UuidV4 $id): ?User
+    {
+        return $this->manager->getRepository(User::class)->findOneBy(['id' => $id]);
     }
 }
