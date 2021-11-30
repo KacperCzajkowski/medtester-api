@@ -38,4 +38,12 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->manager->getRepository(User::class)->findOneBy(['id' => $id]);
     }
+
+    public function fetchActivatedUserByEmail(Email $email): ?User
+    {
+        return $this->manager->getRepository(User::class)->findOneBy([
+            'email' => $email,
+            'isActive' => true
+        ]);
+    }
 }

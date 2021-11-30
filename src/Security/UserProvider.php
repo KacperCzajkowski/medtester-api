@@ -36,7 +36,7 @@ class UserProvider implements UserProviderInterface
         try {
             $email = new Email($username);
 
-            $user = $this->userRepository->findUserByEmail($email);
+            $user = $this->userRepository->fetchActivatedUserByEmail($email);
 
             if ($user) {
                 return new User($user);

@@ -14,4 +14,6 @@ interface UserRepository
     public function addUser(User $user): void;
 
     public function findUserById(UuidV4 $id): ?User;
+
+    public function fetchActivatedUserByEmail(Email $email): ?User;
 }
