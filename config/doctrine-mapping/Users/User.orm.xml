@@ -20,5 +20,6 @@
         <field name="pesel" type="pesel"/>
         <field name="gender"/>
         <field name="laboratoryId" type="uuid" column="laboratory_id" nullable="true"/>
+        <field name="isActive" type="boolean" column="is_active"/>
     </entity>
 </doctrine-mapping>

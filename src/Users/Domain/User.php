@@ -39,6 +39,7 @@ class User
         private UuidV4 $updatedBy,
         private Pesel $pesel,
         private string $gender,
+        private bool $isActive = false
     ) {
     }
 
