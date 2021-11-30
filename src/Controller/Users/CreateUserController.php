@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\Users;
 
-use App\Core\Domain\Email;
 use App\Core\Domain\Exceptions\EmailAlreadyUsedException;
-use App\Mailer\Application\Application\Application\EmailSender;
 use App\Security\User;
 use App\Users\Application\Exception\IllegalArgumentException;
 use App\Users\Application\UseCase\CreateUser;
-use App\Users\Domain\CreateUserType;
 use App\Users\Domain\User as DomainUser;
+use App\Users\Infrastructure\FormType\CreateUserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

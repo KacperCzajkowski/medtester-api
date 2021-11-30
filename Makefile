@@ -19,7 +19,7 @@ bash: ## run bash inside application container
 fixtures: ## load tasks to database using fixtures
 	${EXEC_COMMAND} php bin/console doctrine:fixtures:load
 create_volumes:
-	docker volume create --name=classen-api-postgresql || true
+	docker volume create --name=medtester-api-postgresql || true
 create_networks:
 	docker network create nginx-proxy || true
 start: ## start and install dependencies

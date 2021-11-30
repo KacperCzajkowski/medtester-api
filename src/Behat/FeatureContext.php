@@ -127,7 +127,7 @@ class FeatureContext extends MinkContext
     /**
      * @Given /^there are patients in system:$/
      */
-    public function thereArePatientsInSystem(TableNode $table)
+    public function thereArePatientsInSystem(TableNode $table): void
     {
         foreach ($table->getHash() as $hash) {
             $this->createUserFromHashWithSpecifiedRole($hash, User::ROLES['ROLE_PATIENT']);

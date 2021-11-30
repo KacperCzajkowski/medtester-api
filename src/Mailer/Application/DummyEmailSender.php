@@ -24,7 +24,7 @@ class DummyEmailSender implements EmailSender
             $subject = 'Witamy w platformie',
             new TemplateProperties('createAccount.html.twig', [
                 'userFirstName' => $firstName,
-                'newPassword' => $newPassword
+                'newPassword' => $newPassword,
             ])
         );
 

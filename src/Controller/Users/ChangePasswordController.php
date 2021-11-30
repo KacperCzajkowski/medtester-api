@@ -1,18 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Users;
 
 use App\Security\User;
 use App\Users\Application\Exception\WrongPasswordException;
 use App\Users\Application\UseCase\ChangePassword;
-use App\Users\Domain\ChangePasswordType;
+use App\Users\Infrastructure\FormType\ChangePasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Uid\UuidV4;
 
 class ChangePasswordController extends AbstractController
 {

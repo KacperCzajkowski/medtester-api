@@ -19,7 +19,7 @@ class SymfonyMailerClient implements MailingClient
     {
         $email = (new TemplatedEmail())
             ->from($schema->from()->value())
-            ->to(...array_map(static fn(Email $email) => $email->value(), $schema->to()))
+            ->to(...array_map(static fn (Email $email) => $email->value(), $schema->to()))
             ->subject($schema->subject())
             ->htmlTemplate($schema->properties()->path())
             ->context($schema->properties()->params());

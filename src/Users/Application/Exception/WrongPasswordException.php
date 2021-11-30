@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Users\Application\Exception;
 
 use Symfony\Component\Uid\UuidV4;
