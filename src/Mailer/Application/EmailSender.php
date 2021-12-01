@@ -8,5 +8,5 @@ use App\Core\Domain\Email;
 
 interface EmailSender
 {
-    public function sendEmailWithNewPassword(Email $emailTo, string $firstName, string $newPassword): void;
+    public function sendEmailWithNewPassword(Email $emailTo, string $firstName, string $newPassword, string $tokenId): void;
 }

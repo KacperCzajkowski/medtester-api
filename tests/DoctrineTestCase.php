@@ -5,6 +5,7 @@ namespace App\Tests;
 use App\Core\Domain\Clock;
 use App\Core\Domain\Email;
 use App\Core\Domain\SystemId;
+use App\Users\Application\UseCase\ActivateUser;
 use App\Users\Application\UseCase\CreateUser;
 use App\Users\Domain\UserRepository;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
@@ -76,6 +77,7 @@ class DoctrineTestCase extends KernelTestCase
         UuidV4 $id,
         Email $email,
         array $roles,
+        UuidV4 $activationTokenId,
         string $firstName = 'Kacper',
         string $lastName = 'testerski',
         UuidV4 $createdBy = null,
@@ -92,7 +94,8 @@ class DoctrineTestCase extends KernelTestCase
             $roles ?: ['ROLE_PATIENT'],
             $createdBy ?? SystemId::asUuidV4(),
             $pesel,
-            $gender
+            $gender,
+            $activationTokenId
         );
 
         if ($laboratoryId) {
@@ -100,6 +103,8 @@ class DoctrineTestCase extends KernelTestCase
         }
 
         $this->messageBus()->dispatch($command);
+
+        $this->messageBus()->dispatch(new ActivateUser\Command($activationTokenId));
 
         return $id;
     }

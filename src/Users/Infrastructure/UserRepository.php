@@ -43,7 +43,7 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->manager->getRepository(User::class)->findOneBy([
             'email' => $email,
-            'isActive' => true
+            'isActive' => true,
         ]);
     }
 }

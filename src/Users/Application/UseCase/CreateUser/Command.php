@@ -23,7 +23,8 @@ class Command
         private array $roles,
         private UuidV4 $createdBy,
         private string $pesel,
-        private string $gender
+        private string $gender,
+        private UuidV4 $activationTokenId
     ) {
     }
 
@@ -78,5 +79,10 @@ class Command
     public function setLaboratoryId(UuidV4 $laboratoryId): void
     {
         $this->laboratoryId = $laboratoryId;
+    }
+
+    public function activationTokenId(): UuidV4
+    {
+        return $this->activationTokenId;
     }
 }

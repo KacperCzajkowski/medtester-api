@@ -22,7 +22,8 @@ class CreateUserTest extends DoctrineTestCase
             roles: $roles = ['ROLE_PATIENT'],
             createdBy: SystemId::asUuidV4(),
             pesel: '84071592871',
-            gender: User::GENDER['MALE']
+            gender: User::GENDER['MALE'],
+            activationTokenId: UuidV4::v4()
         ));
 
         $result = $this->connection()->fetchAssociative('
@@ -47,7 +48,8 @@ class CreateUserTest extends DoctrineTestCase
             roles: $roles = [User::ROLES['ROLE_LABORATORY_WORKER']],
             createdBy: SystemId::asUuidV4(),
             pesel: '84071592871',
-            gender: User::GENDER['MALE']
+            gender: User::GENDER['MALE'],
+            activationTokenId: UuidV4::v4()
         );
 
         $command->setLaboratoryId(UuidV4::v4());
@@ -78,7 +80,8 @@ class CreateUserTest extends DoctrineTestCase
             roles: [User::ROLES['ROLE_LABORATORY_WORKER']],
             createdBy: SystemId::asUuidV4(),
             pesel: '84071592871',
-            gender: User::GENDER['MALE']
+            gender: User::GENDER['MALE'],
+            activationTokenId: UuidV4::v4()
         ));
     }
 }

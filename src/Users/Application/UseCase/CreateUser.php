@@ -10,6 +10,8 @@ use App\Mailer\Application\EmailSender;
 use App\Security\User;
 use App\Users\Application\Exception\IllegalArgumentException;
 use App\Users\Domain\User as DomainUser;
+use App\Users\Domain\UserActivation;
+use App\Users\Domain\UserActivationRepository;
 use App\Users\Domain\UserRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -21,7 +23,8 @@ class CreateUser implements MessageHandlerInterface
         private Clock $clock,
         private PasswordGenerator $passwordGenerator,
         private UserPasswordHasherInterface $passwordHasher,
-        private EmailSender $emailSender
+        private EmailSender $emailSender,
+        private UserActivationRepository $userActivationRepository
     ) {
     }
 
@@ -51,7 +54,7 @@ class CreateUser implements MessageHandlerInterface
 
         if (in_array('ROLE_LABORATORY_WORKER', $command->roles(), true)) {
             if ($labId) {
-                $newUser->setLaboratoryId($labId);
+                $newUser->setLaboratoryId($labId, $command->createdBy(), $this->clock);
             } else {
                 throw IllegalArgumentException::byInvalidDataToCreateLaboratoryWorker($command->createdBy());
             }
@@ -60,11 +63,26 @@ class CreateUser implements MessageHandlerInterface
         $password = $this->passwordGenerator->getNew();
 
         $newUser->setPassword(
-            $this->passwordHasher->hashPassword(new User($newUser), $password)
+            $this->passwordHasher->hashPassword(new User($newUser), $password),
+            $command->createdBy(),
+            $this->clock
         );
 
         $this->userRepository->addUser($newUser);
 
-        $this->emailSender->sendEmailWithNewPassword($command->email(), $command->firstName(), $password);
+        $activation = new UserActivation(
+            $command->activationTokenId(),
+            $newUser->id(),
+            $this->clock->currentDateTime()
+        );
+
+        $this->userActivationRepository->addActivation($activation);
+
+        $this->emailSender->sendEmailWithNewPassword(
+            $command->email(),
+            $command->firstName(),
+            $password,
+            $command->activationTokenId()->toRfc4122()
+        );
     }
 }

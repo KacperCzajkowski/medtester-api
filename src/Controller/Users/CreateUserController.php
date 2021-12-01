@@ -57,7 +57,8 @@ class CreateUserController extends AbstractController
             [$data['roles']],
             $creator->id(),
             $data['pesel'],
-            $data['gender']
+            $data['gender'],
+            UuidV4::v4()
         );
 
         if ($data['laboratoryId']) {

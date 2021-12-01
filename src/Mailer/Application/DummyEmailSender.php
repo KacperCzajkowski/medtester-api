@@ -12,11 +12,12 @@ class DummyEmailSender implements EmailSender
 {
     public function __construct(
         private MailingClient $client,
-        private string $senderEmail
+        private string $senderEmail,
+        private string $frontendUrl
     ) {
     }
 
-    public function sendEmailWithNewPassword(Email $emailTo, string $firstName, string $newPassword): void
+    public function sendEmailWithNewPassword(Email $emailTo, string $firstName, string $newPassword, string $tokenId): void
     {
         $schema = new TemplatedEmailSchema(
             $from = new Email($this->senderEmail),
@@ -25,6 +26,8 @@ class DummyEmailSender implements EmailSender
             new TemplateProperties('createAccount.html.twig', [
                 'userFirstName' => $firstName,
                 'newPassword' => $newPassword,
+                'frontendUrl' => $this->frontendUrl,
+                'tokenId' => $tokenId,
             ])
         );
 

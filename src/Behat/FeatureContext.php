@@ -7,6 +7,7 @@ namespace App\Behat;
 use App\Core\Domain\Clock;
 use App\Core\Domain\Email;
 use App\Core\Domain\SystemId;
+use App\Users\Application\UseCase\ActivateUser;
 use App\Users\Application\UseCase\CreateUser;
 use App\Users\Domain\User;
 use App\Users\Domain\UserRepository;
@@ -156,7 +157,8 @@ class FeatureContext extends MinkContext
             [$role],
             array_key_exists('createdBy', $hash) ? UuidV4::fromString($hash['createdBy']) : SystemId::asUuidV4(),
             $hash['pesel'],
-            $hash['gender']
+            $hash['gender'],
+            $tokenId = array_key_exists('activationTokenId', $hash) ? UuidV4::fromString($hash['activationTokenId']) : UuidV4::v4()
         );
 
         if (array_key_exists('laboratoryId', $hash)) {
@@ -165,12 +167,16 @@ class FeatureContext extends MinkContext
 
         $this->messageBus->dispatch($command);
 
+        if (!array_key_exists('activationTokenId', $hash)) {
+            $this->messageBus->dispatch(new ActivateUser\Command($tokenId->toRfc4122()));
+        }
+
         /**
          * @var User $user
          */
         $user = $this->userRepository->findUserByEmail(new Email($hash['email']));
 
-        $user->setPassword(self::DEFAULT_PASSWORD);
+        $user->setPassword(self::DEFAULT_PASSWORD, SystemId::asUuidV4(), $this->clock);
         $this->usersManager()->persist($user);
     }
 
