@@ -24,6 +24,7 @@ class User
 
     private ?string $password;
     private ?UuidV4 $laboratoryId = null;
+    private ?\DateTimeImmutable $removedAt = null;
 
     /**
      * @param string[] $roles
@@ -100,6 +101,17 @@ class User
     public function firstName(): string
     {
         return $this->firstName;
+    }
+
+    public function markAsRemoved(UuidV4 $updatedBy, Clock $clock): void
+    {
+        $this->removedAt = $clock->currentDateTime();
+        $this->updateAuditInfo($updatedBy, $clock);
+    }
+
+    public function removedAt(): ?\DateTimeImmutable
+    {
+        return $this->removedAt;
     }
 
     private function updateAuditInfo(UuidV4 $updatedBy, Clock $clock): void

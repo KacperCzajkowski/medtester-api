@@ -16,7 +16,7 @@ class ChangePasswordTest extends DoctrineTestCase
     {
         parent::setUp();
 
-        $this->id = $this->createUser(UuidV4::v4(), new Email('test@test.pl'), ['ROLE_PATIENT'], UuidV4::v4());
+        $this->id = $this->createActiveUser(UuidV4::v4(), new Email('test@test.pl'), ['ROLE_PATIENT'], UuidV4::v4());
     }
 
     public function testUserSuccessfullyChangedPassword(): void

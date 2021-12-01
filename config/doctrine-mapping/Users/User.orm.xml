@@ -21,5 +21,6 @@
         <field name="gender"/>
         <field name="laboratoryId" type="uuid" column="laboratory_id" nullable="true"/>
         <field name="isActive" type="boolean" column="is_active"/>
+        <field name="removedAt" type="datetime_immutable" column="removed_at" nullable="true"/>
     </entity>
 </doctrine-mapping>

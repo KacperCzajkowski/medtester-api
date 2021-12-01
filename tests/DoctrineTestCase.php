@@ -74,7 +74,12 @@ class DoctrineTestCase extends KernelTestCase
         return static::getContainer()->get(UserRepository::class);
     }
 
-    protected function createUser(
+    protected function userActivationRepository(): UserActivationRepository
+    {
+        return static::getContainer()->get(UserActivationRepository::class);
+    }
+
+    protected function createActiveUser(
         UuidV4 $id,
         Email $email,
         array $roles,
@@ -106,6 +111,40 @@ class DoctrineTestCase extends KernelTestCase
         $this->messageBus()->dispatch($command);
 
         $this->messageBus()->dispatch(new ActivateUser\Command($activationTokenId));
+
+        return $id;
+    }
+
+    protected function createInactiveUser(
+        UuidV4 $id,
+        Email $email,
+        array $roles,
+        UuidV4 $activationTokenId,
+        string $firstName = 'Kacper',
+        string $lastName = 'testerski',
+        UuidV4 $createdBy = null,
+        string $pesel = '54102377645',
+        string $gender = 'MALE',
+        ?UuidV4 $laboratoryId = null
+    ): UuidV4
+    {
+        $command = new CreateUser\Command(
+            $id,
+            $firstName,
+            $lastName,
+            $email,
+            $roles ?: ['ROLE_PATIENT'],
+            $createdBy ?? SystemId::asUuidV4(),
+            $pesel,
+            $gender,
+            $activationTokenId
+        );
+
+        if ($laboratoryId) {
+            $command->setLaboratoryId($laboratoryId);
+        }
+
+        $this->messageBus()->dispatch($command);
 
         return $id;
     }

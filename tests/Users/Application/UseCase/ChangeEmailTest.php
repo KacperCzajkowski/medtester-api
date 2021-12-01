@@ -19,7 +19,7 @@ class ChangeEmailTest extends DoctrineTestCase
     {
         parent::setUp();
 
-        $this->createUser(
+        $this->createActiveUser(
             $this->userId = UuidV4::v4(),
             new Email('test@test.pl'),
             ['ROLE_PATIENT'],

@@ -40,11 +40,23 @@ class UserActivationRepository implements UserActivationRepositoryInterface
 
     public function findActiveActivationByUserId(UuidV4 $userId): ?UserActivation
     {
-        return $this->managerRegistry->getRepository(UserActivation::class)->findOneBy([
-            'userId' => $userId,
-            'cancelledAt' => null,
-            'usedAt' => null,
-        ]);
+//        return $this->managerRegistry->getRepository(UserActivation::class)->findOneBy([
+//            'userId' => $userId,
+//            'cancelledAt' => null,
+//            'usedAt' => null,
+//        ]);
+        $query = $this->entityManager->createQuery('
+            SELECT ac 
+            FROM App\Users\Domain\UserActivation ac 
+            WHERE ac.userId = :id AND ac.usedAt IS NULL AND ac.cancelledAt IS NULL
+        ');
+        $query = $query->setParameter('id', $userId);
+
+        try {
+            return $query->getSingleResult();
+        } catch (\Exception) {
+            return null;
+        }
     }
 
     private function manager(): ObjectManager
