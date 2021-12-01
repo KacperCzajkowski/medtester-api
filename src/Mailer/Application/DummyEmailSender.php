@@ -7,6 +7,7 @@ namespace App\Mailer\Application;
 use App\Core\Domain\Email;
 use App\Mailer\Infrastructure\TemplatedEmailSchema;
 use App\Mailer\Infrastructure\TemplateProperties;
+use Symfony\Component\Uid\UuidV4;
 
 class DummyEmailSender implements EmailSender
 {
@@ -28,6 +29,22 @@ class DummyEmailSender implements EmailSender
                 'newPassword' => $newPassword,
                 'frontendUrl' => $this->frontendUrl,
                 'tokenId' => $tokenId,
+            ])
+        );
+
+        $this->client->sendTemplatedEmail($schema);
+    }
+
+    public function sendEmailWithActivationLink(Email $emailTo, UuidV4 $activationId, string $firstName): void
+    {
+        $schema = new TemplatedEmailSchema(
+            $from = new Email($this->senderEmail),
+            $to = [$emailTo],
+            $subject = 'Aktywacja konta',
+            new TemplateProperties('activateAccount.html.twig', [
+                'userFirstName' => $firstName,
+                'frontendUrl' => $this->frontendUrl,
+                'tokenId' => $activationId->toRfc4122(),
             ])
         );
 

@@ -7,6 +7,7 @@ use App\Core\Domain\Email;
 use App\Core\Domain\SystemId;
 use App\Users\Application\UseCase\ActivateUser;
 use App\Users\Application\UseCase\CreateUser;
+use App\Users\Domain\UserActivationRepository;
 use App\Users\Domain\UserRepository;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\DBAL\Connection;

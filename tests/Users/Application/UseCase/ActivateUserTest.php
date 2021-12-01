@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Tests\Users\Application\UseCase;
 
 use App\Core\Domain\Email;
+use App\Core\Domain\SystemId;
 use App\Tests\DoctrineTestCase;
 use App\Users\Application\UseCase\ActivateUser;
+use App\Users\Application\UseCase\CreateUser;
 use Symfony\Component\Uid\UuidV4;
 
 class ActivateUserTest extends DoctrineTestCase
@@ -18,12 +20,17 @@ class ActivateUserTest extends DoctrineTestCase
     {
         parent::setUp();
 
-        $this->userId = $this->createUser(
-            UuidV4::v4(),
-            new Email('test@test.pl'),
-            ['ROLE_PATIENT'],
-            $this->tokenId = UuidV4::v4()
-        );
+        $this->messageBus()->dispatch(new CreateUser\Command(
+            id: $this->userId = UuidV4::v4(),
+            firstName: 'Kacper',
+            lastName: 'Czajkowski',
+            email: 'test2@test.pl',
+            roles: ['ROLE_PATIENT'],
+            createdBy:  SystemId::asUuidV4(),
+            pesel: '54102377645',
+            gender: 'MALE',
+            activationTokenId: $this->tokenId = UuidV4::v4()
+        ));
     }
 
     public function testUserWillBeActivatedSuccessfullyWhenTokenExistsAndIsNotUsed(): void

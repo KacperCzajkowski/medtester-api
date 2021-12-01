@@ -13,12 +13,18 @@ class UserActivation
         private UuidV4 $userId,
         private \DateTimeImmutable $createdAt,
         private ?\DateTimeImmutable $usedAt = null,
+        private ?\DateTimeImmutable $cancelledAt = null
     ) {
     }
 
     public function id(): UuidV4
     {
         return $this->id;
+    }
+
+    public function cancelActivationToken(\DateTimeImmutable $cancelledAt): void
+    {
+        $this->cancelledAt = $cancelledAt;
     }
 
     public function userId(): UuidV4

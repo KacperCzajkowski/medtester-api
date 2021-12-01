@@ -90,6 +90,18 @@ class User
         $this->updateAuditInfo($updatedBy, $clock);
     }
 
+    public function updateUserEmail(Email $newEmail, UuidV4 $userId, Clock $clock): void
+    {
+        $this->email = $newEmail;
+        $this->isActive = false;
+        $this->updateAuditInfo($userId, $clock);
+    }
+
+    public function firstName(): string
+    {
+        return $this->firstName;
+    }
+
     private function updateAuditInfo(UuidV4 $updatedBy, Clock $clock): void
     {
         $this->updatedBy = $updatedBy;

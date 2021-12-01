@@ -11,4 +11,6 @@ interface UserActivationRepository
     public function findActivationById(UuidV4 $id): ?UserActivation;
 
     public function addActivation(UserActivation $activation): void;
+
+    public function findActiveActivationByUserId(UuidV4 $userId): ?UserActivation;
 }
