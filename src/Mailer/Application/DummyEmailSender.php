@@ -18,7 +18,7 @@ class DummyEmailSender implements EmailSender
     ) {
     }
 
-    public function sendEmailWithNewPassword(Email $emailTo, string $firstName, string $newPassword, string $tokenId): void
+    public function sendInvitationEmail(Email $emailTo, string $firstName, string $newPassword, string $tokenId): void
     {
         $schema = new TemplatedEmailSchema(
             $from = new Email($this->senderEmail),
@@ -45,6 +45,22 @@ class DummyEmailSender implements EmailSender
                 'userFirstName' => $firstName,
                 'frontendUrl' => $this->frontendUrl,
                 'tokenId' => $activationId->toRfc4122(),
+            ])
+        );
+
+        $this->client->sendTemplatedEmail($schema);
+    }
+
+    public function sentEmailWithNewPassword(Email $emailTo, string $firstName, string $newPassword): void
+    {
+        $schema = new TemplatedEmailSchema(
+            $from = new Email($this->senderEmail),
+            $to = [$emailTo],
+            $subject = 'Zmiana hasła',
+            new TemplateProperties('newPassword.html.twig', [
+                'userFirstName' => $firstName,
+                'frontendUrl' => $this->frontendUrl,
+                'newPassword' => $newPassword,
             ])
         );
 

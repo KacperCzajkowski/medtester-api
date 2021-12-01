@@ -14,7 +14,7 @@ class DummyEmailSenderTest extends WebTestCase
         $client = static::createClient();
         $emailSender = static::getContainer()->get(EmailSender::class);
 
-        $emailSender->sendEmailWithNewPassword(new Email('test@test.pl'), 'Kacper', '12344312', UuidV4::v4()->toRfc4122());
+        $emailSender->sendInvitationEmail(new Email('test@test.pl'), 'Kacper', '12344312', UuidV4::v4()->toRfc4122());
         static::assertEmailCount(1);
     }
 }

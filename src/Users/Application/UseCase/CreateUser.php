@@ -78,7 +78,7 @@ class CreateUser implements MessageHandlerInterface
 
         $this->userActivationRepository->addActivation($activation);
 
-        $this->emailSender->sendEmailWithNewPassword(
+        $this->emailSender->sendInvitationEmail(
             $command->email(),
             $command->firstName(),
             $password,
