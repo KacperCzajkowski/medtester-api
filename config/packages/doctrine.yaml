@@ -18,3 +18,9 @@ doctrine:
                 dir: '%kernel.project_dir%/config/doctrine-mapping/Users'
                 prefix: 'App\Users\Domain'
                 alias: Users
+            Laboratory:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine-mapping/Laboratory'
+                prefix: 'App\Laboratory\Domain'
+                alias: Laboratory

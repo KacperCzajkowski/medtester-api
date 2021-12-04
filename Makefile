@@ -12,6 +12,7 @@ test_db_setup:
 	${EXEC_COMMAND} bin/console doctrine:migration:migrate --env=test -n || true
 migrate:
 	${EXEC_COMMAND} bin/console doctrine:migration:migrate -n
+	${EXEC_COMMAND} bin/console doctrine:migration:migrate -n --env=test
 build:
 	docker-compose build
 bash: ## run bash inside application container
