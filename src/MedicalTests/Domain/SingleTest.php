@@ -24,4 +24,18 @@ class SingleTest implements \JsonSerializable
             'indicators' => $this->indicators,
         ];
     }
+
+    public static function fromArray(array $array): self
+    {
+        return new SingleTest(
+            $array['name'],
+            $array['icdCode'],
+            array_map(static fn (array $tmp): Indicator => Indicator::fromArray($tmp), $array['indicators'])
+        );
+    }
+
+    public function icdCode(): string
+    {
+        return $this->icdCode;
+    }
 }

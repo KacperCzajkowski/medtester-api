@@ -7,17 +7,17 @@ namespace App\MedicalTests\Domain;
 class ReferenceRange implements \JsonSerializable
 {
     public function __construct(
-        private ?int $min = null,
-        private ?int $max = null
+        private ?float $min = null,
+        private ?float $max = null
     ) {
     }
 
-    public function min(): ?int
+    public function min(): ?float
     {
         return $this->min;
     }
 
-    public function max(): ?int
+    public function max(): ?float
     {
         return $this->max;
     }
@@ -28,5 +28,10 @@ class ReferenceRange implements \JsonSerializable
             'min' => $this->min,
             'max' => $this->max,
         ];
+    }
+
+    public static function fromArray(array $range): self
+    {
+        return new ReferenceRange($range['min'], $range['max']);
     }
 }

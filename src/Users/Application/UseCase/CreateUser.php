@@ -6,6 +6,7 @@ namespace App\Users\Application\UseCase;
 
 use App\Core\Domain\Clock;
 use App\Core\Domain\Exceptions\EmailAlreadyUsedException;
+use App\Laboratory\Domain\LaboratoryRepository;
 use App\Mailer\Application\EmailSender;
 use App\Security\User;
 use App\Users\Application\Exception\IllegalArgumentException;
@@ -24,7 +25,8 @@ class CreateUser implements MessageHandlerInterface
         private PasswordGenerator $passwordGenerator,
         private UserPasswordHasherInterface $passwordHasher,
         private EmailSender $emailSender,
-        private UserActivationRepository $userActivationRepository
+        private UserActivationRepository $userActivationRepository,
+        private LaboratoryRepository $laboratoryRepository
     ) {
     }
 
@@ -54,6 +56,12 @@ class CreateUser implements MessageHandlerInterface
 
         if (in_array('ROLE_LABORATORY_WORKER', $command->roles(), true)) {
             if ($labId) {
+                $lab = $this->laboratoryRepository->findLaboratoryById($labId);
+
+                if (!$lab) {
+                    throw IllegalArgumentException::byInvalidDataToCreateLaboratoryWorker($command->createdBy());
+                }
+
                 $newUser->setLaboratoryId($labId, $command->createdBy(), $this->clock);
             } else {
                 throw IllegalArgumentException::byInvalidDataToCreateLaboratoryWorker($command->createdBy());

@@ -45,7 +45,7 @@ class CreateUserController extends AbstractController
             return $this->json(null, Response::HTTP_METHOD_NOT_ALLOWED);
         }
 
-        if ($this->hasCreatorPermissionToCreateUserWithRole($creator, $data['roles'])) {
+        if (!$this->hasCreatorPermissionToCreateUserWithRole($creator, $data['roles'])) {
             return $this->json(null, Response::HTTP_METHOD_NOT_ALLOWED);
         }
 
@@ -84,7 +84,11 @@ class CreateUserController extends AbstractController
 
     private function hasCreatorPermissionToCreateUserWithRole(User $creator, string $newUserRole): bool
     {
-        return $creator->hasRole(DomainUser::ROLES['ROLE_LABORATORY_WORKER'])
-            && $newUserRole !== DomainUser::ROLES['ROLE_PATIENT'];
+        $permissions = [
+            'ROLE_PATIENT' => ['ROLE_LABORATORY_WORKER', 'ROLE_SYSTEM_ADMIN'],
+            'ROLE_LABORATORY_WORKER' => ['ROLE_SYSTEM_ADMIN'],
+        ];
+
+        return $creator->hasNecessaryRole($permissions[$newUserRole]);
     }
 }

@@ -96,4 +96,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return !empty($result);
     }
+
+    public function hasNecessaryRole(array $neededRoles): bool
+    {
+        $result = array_diff($neededRoles, $this->getRoles());
+
+        return count($result) < count($neededRoles);
+    }
 }

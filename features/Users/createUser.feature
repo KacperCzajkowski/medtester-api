@@ -4,6 +4,9 @@ Feature: As a laboratory worker I want to create new patient
     Given there are admins in system:
       | id                                   | firstName | lastName   | email           | pesel       | gender |
       | a6c310ed-13a5-4e1a-9ad9-168911e2c2cf | Kacper    | Czajkowski | kacper@admin.pl | 84101144272 | MALE   |
+    And there are laboratories in system:
+      | id                                   | name         | createdBy                            |
+      | ade2c510-f9d1-4c1f-8b76-8fba0e7a16a9 | Lab number 1 | 9b7c792f-09f9-4a68-b5c1-3894d56f940b |
     And there are laboratory workers is system:
       | id                                   | laboratoryId                         | firstName | lastName   | email         | createdBy                            | pesel       | gender |
       | 145a22a7-e98b-4dfb-88cb-13ab130056e3 | ade2c510-f9d1-4c1f-8b76-8fba0e7a16a9 | Kacper    | Czajkowski | kacper@lab.pl | f9d89550-d592-4c54-88e4-8a590c16649a | 83072347336 | MALE   |
@@ -55,7 +58,7 @@ Feature: As a laboratory worker I want to create new patient
         "lastName": "Jakistam",
         "pesel": "99111909931",
         "gender": "FEMALE",
-        "laboratoryId": "647e6406-ab5f-4a45-b262-18d7b5037f09"
+        "laboratoryId": "ade2c510-f9d1-4c1f-8b76-8fba0e7a16a9"
       }
     """
     Then the response status code should be 201

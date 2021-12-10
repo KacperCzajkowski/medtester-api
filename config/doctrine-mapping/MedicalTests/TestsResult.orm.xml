@@ -12,6 +12,6 @@
         <field name="status" column="status"/>
         <field name="createdAt" type="datetime_immutable" column="created_at"/>
         <field name="updatedAt" type="datetime_immutable" column="updated_at"/>
-        <field name="results" type="json_array" column="results"/>
+        <field name="results" type="result_array" column="results"/>
     </entity>
 </doctrine-mapping>

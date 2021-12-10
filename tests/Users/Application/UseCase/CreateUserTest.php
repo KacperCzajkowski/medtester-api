@@ -12,6 +12,15 @@ use App\Users\Domain\User;
 
 class CreateUserTest extends DoctrineTestCase
 {
+    private UuidV4 $labId;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->labId = $this->createNewLab(UuidV4::v4());
+    }
+
     public function testPatientUserWillBeCreatedSuccessfully(): void
     {
         $this->messageBus()->dispatch(new CreateUser\Command(
@@ -52,7 +61,7 @@ class CreateUserTest extends DoctrineTestCase
             activationTokenId: UuidV4::v4()
         );
 
-        $command->setLaboratoryId(UuidV4::v4());
+        $command->setLaboratoryId($this->labId);
 
         $this->messageBus()->dispatch($command);
 

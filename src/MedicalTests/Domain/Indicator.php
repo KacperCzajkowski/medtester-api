@@ -23,4 +23,14 @@ class Indicator implements \JsonSerializable
             'referenceRange' => $this->referenceRange,
         ];
     }
+
+    public static function fromArray(array $result): self
+    {
+        return new Indicator(
+            $result['name'],
+            $result['result'],
+            $result['unit'],
+            ReferenceRange::fromArray($result['referenceRange'])
+        );
+    }
 }

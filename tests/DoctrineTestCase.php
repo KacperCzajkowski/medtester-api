@@ -5,6 +5,9 @@ namespace App\Tests;
 use App\Core\Domain\Clock;
 use App\Core\Domain\Email;
 use App\Core\Domain\SystemId;
+use App\Laboratory\Domain\Laboratory;
+use App\Laboratory\Domain\LaboratoryRepository;
+use App\MedicalTests\Domain\TestsResultRepository;
 use App\Users\Application\UseCase\ActivateUser;
 use App\Users\Application\UseCase\CreateUser;
 use App\Users\Domain\UserActivationRepository;
@@ -61,7 +64,7 @@ class DoctrineTestCase extends KernelTestCase
     {
         $container = self::$container;
 
-        return $container->get('App\Core\Domain\Clock\Clock');
+        return $container->get(Clock::class);
     }
 
     protected function userPasswordHasher(): UserPasswordHasherInterface
@@ -77,6 +80,11 @@ class DoctrineTestCase extends KernelTestCase
     protected function userActivationRepository(): UserActivationRepository
     {
         return static::getContainer()->get(UserActivationRepository::class);
+    }
+
+    protected function laboratoryRepository(): LaboratoryRepository
+    {
+        return static::getContainer()->get(LaboratoryRepository::class);
     }
 
     protected function createActiveUser(
@@ -147,5 +155,31 @@ class DoctrineTestCase extends KernelTestCase
         $this->messageBus()->dispatch($command);
 
         return $id;
+    }
+
+    protected function createNewLab(
+        UuidV4 $id,
+        string $name = 'test lab',
+        ?\DateTimeImmutable $createdAt = null,
+        ?UuidV4 $createdBy = null
+    ): UuidV4
+    {
+        $date = $this->clock()->currentDateTime();
+
+        $this->laboratoryRepository()->addLaboratory(new Laboratory(
+            id: $id,
+            name: $name,
+            createdAt: $createdAt ?? $date,
+            createdBy: SystemId::asUuidV4(),
+            updatedAt: $createdAt ?? $date,
+            updatedBy: SystemId::asUuidV4(),
+        ));
+
+        return $id;
+    }
+
+    protected function testsResultRepository(): TestsResultRepository
+    {
+        return static::getContainer()->get(TestsResultRepository::class);
     }
 }

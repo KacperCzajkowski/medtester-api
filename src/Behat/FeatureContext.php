@@ -7,6 +7,8 @@ namespace App\Behat;
 use App\Core\Domain\Clock;
 use App\Core\Domain\Email;
 use App\Core\Domain\SystemId;
+use App\Laboratory\Domain\Laboratory;
+use App\Laboratory\Domain\LaboratoryRepository;
 use App\Users\Application\UseCase\ActivateUser;
 use App\Users\Application\UseCase\CreateUser;
 use App\Users\Domain\User;
@@ -40,7 +42,8 @@ class FeatureContext extends MinkContext
         private MessageBusInterface $messageBus,
         private Clock $clock,
         private ManagerRegistry $managerRegistry,
-        private UserRepository $userRepository
+        private UserRepository $userRepository,
+        private LaboratoryRepository $laboratoryRepository
     ) {
     }
 
@@ -135,6 +138,25 @@ class FeatureContext extends MinkContext
         }
 
         $this->usersManager()->flush();
+    }
+
+    /**
+     * @Given /^there are laboratories in system:$/
+     */
+    public function thereAreLaboratoriesInSystem(TableNode $table): void
+    {
+        foreach ($table->getHash() as $hash) {
+            $lab = new Laboratory(
+                id: UuidV4::fromString($hash['id']),
+                name: $hash['name'] ?? 'Testowy lab',
+                createdAt: $this->clock->currentDateTime(),
+                createdBy: UuidV4::fromString($hash['createdBy']),
+                updatedAt: $this->clock->currentDateTime(),
+                updatedBy: UuidV4::fromString($hash['createdBy'])
+            );
+
+            $this->laboratoryRepository->addLaboratory($lab);
+        }
     }
 
     private function connection(): Connection

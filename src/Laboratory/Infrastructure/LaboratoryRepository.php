@@ -8,6 +8,7 @@ use App\Laboratory\Domain\Laboratory;
 use App\Laboratory\Domain\LaboratoryRepository as LaboratoryRepositoryInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Uid\UuidV4;
 
 class LaboratoryRepository implements LaboratoryRepositoryInterface
 {
@@ -24,5 +25,10 @@ class LaboratoryRepository implements LaboratoryRepositoryInterface
 
         $manager->persist($laboratory);
         $manager->flush(); // todo w przypadku dodawania usecase'ow na dodawanie laba trzeba to wyrzucic
+    }
+
+    public function findLaboratoryById(UuidV4 $id): ?Laboratory
+    {
+        return $this->managerRegistry->getRepository(Laboratory::class)->findOneBy(['id' => $id]);
     }
 }
