@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\MedicalTests\Application;
 
 use App\Core\Domain\Email;
-use App\MedicalTests\Application\SaveTestsResult;
+use App\MedicalTests\Application\Usecase\CreateTestsResult;
+use App\MedicalTests\Application\Usecase\SaveTestsResult;
 use App\Tests\DoctrineTestCase;
 use Symfony\Component\Uid\UuidV4;
 
@@ -24,7 +25,8 @@ class SaveTestsResultTest extends DoctrineTestCase
             id: UuidV4::v4(),
             email: new Email('test@patient.pl'),
             roles: ['ROLE_PATIENT'],
-            activationTokenId: UuidV4::v4()
+            activationTokenId: UuidV4::v4(),
+            pesel: $pesel = '54102377645'
         );
 
         $this->laboratoryWorkerId = $this->createActiveUser(
@@ -34,13 +36,18 @@ class SaveTestsResultTest extends DoctrineTestCase
             activationTokenId: UuidV4::v4(),
             laboratoryId: $labId
         );
+
+        $this->messageBus()->dispatch(new CreateTestsResult\Command(
+            $this->userId->toRfc4122(),
+            $this->laboratoryWorkerId->toRfc4122(),
+            $pesel
+        ));
+
     }
 
     public function testTestsResultWillBeSavedSuccessfullyForTheFirstTime(): void
     {
         $this->messageBus()->dispatch(new SaveTestsResult\Command(
-            testId: $testId = UuidV4::v4(),
-            userId: $this->userId,
             laboratoryWorkerId: $this->laboratoryWorkerId,
             status: 'in-progress',
             results: [
@@ -83,9 +90,8 @@ class SaveTestsResultTest extends DoctrineTestCase
         $result = $this->connection()->fetchAllAssociative('select * from tests_results');
 
         static::assertNotEmpty($result);
-        static::assertEquals($testId, Uuidv4::fromString($result[0]['id']));
 
-        $testsResult = $this->testsResultRepository()->fetchTestsResultById($testId);
+        $testsResult = $this->testsResultRepository()->fetchTestsResultInProgressByLabWorkerId($this->laboratoryWorkerId);
 
         static::assertCount(1, $testsResult->results());
     }
@@ -93,8 +99,6 @@ class SaveTestsResultTest extends DoctrineTestCase
     public function testResulWillBeUpdated(): void
     {
         $this->messageBus()->dispatch(new SaveTestsResult\Command(
-            testId: $testId = UuidV4::v4(),
-            userId: $this->userId,
             laboratoryWorkerId: $this->laboratoryWorkerId,
             status: 'in-progress',
             results: [
@@ -117,8 +121,6 @@ class SaveTestsResultTest extends DoctrineTestCase
         ));
 
         $this->messageBus()->dispatch(new SaveTestsResult\Command(
-            testId: $testId,
-            userId: $this->userId,
             laboratoryWorkerId: $this->laboratoryWorkerId,
             status: 'in-progress',
             results: [
@@ -161,9 +163,8 @@ class SaveTestsResultTest extends DoctrineTestCase
         $result = $this->connection()->fetchAllAssociative('select * from tests_results');
 
         static::assertNotEmpty($result);
-        static::assertEquals($testId, Uuidv4::fromString($result[0]['id']));
 
-        $testsResult = $this->testsResultRepository()->fetchTestsResultById($testId);
+        $testsResult = $this->testsResultRepository()->fetchTestsResultInProgressByLabWorkerId($this->laboratoryWorkerId);
 
         static::assertCount(1, $testsResult->results());
     }

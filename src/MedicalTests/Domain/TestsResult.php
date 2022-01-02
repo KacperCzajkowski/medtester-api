@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\MedicalTests\Domain;
 
 use App\Core\Domain\Clock;
-use App\MedicalTests\Application\SaveTestsResult;
+use App\MedicalTests\Application\Usecase\SaveTestsResult;
 use Symfony\Component\Uid\UuidV4;
 
 class TestsResult implements \JsonSerializable
@@ -35,19 +35,6 @@ class TestsResult implements \JsonSerializable
             'updatedAt' => $this->updatedAt,
             'results' => $this->results,
         ];
-    }
-
-    public static function fromCommandAndClock(SaveTestsResult\Command $command, Clock $clock): self
-    {
-        return new TestsResult(
-            $command->testId(),
-            $command->userId(),
-            $command->laboratoryWorkerId(),
-            $command->status(),
-            $clock->currentDateTime(),
-            $clock->currentDateTime(),
-            array_map(static fn (array $array): SingleTest => SingleTest::fromArray($array), $command->results())
-        );
     }
 
     public function updateFromCommandAndClock(SaveTestsResult\Command $command, Clock $clock): void

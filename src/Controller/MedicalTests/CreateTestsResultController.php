@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\MedicalTests;
 
-use App\MedicalTests\Application\Usecase\SaveTestsResult;
-use App\MedicalTests\Infrastructure\FormTypes\SaveTestsResultType;
+use App\MedicalTests\Application\Usecase\CreateTestsResult;
+use App\MedicalTests\Infrastructure\FormTypes\CreateTestsResultType;
 use App\Security\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,13 +13,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Uid\UuidV4;
 
-class SaveTestsResultController extends AbstractController
+class CreateTestsResultController extends AbstractController
 {
-    #[Route(path: '/lab-worker/test', name: 'tests-result-saving', methods: 'POST')]
+    //todo testy
+
+    #[Route(path: '/lab-worker/test/create', name: 'tests-result-creating', methods: 'POST')]
     public function activateUser(Request $request): JsonResponse
     {
-        $form = $this->createForm(SaveTestsResultType::class);
+        $form = $this->createForm(CreateTestsResultType::class);
 
         $form->submit($request->request->all());
 
@@ -35,10 +38,10 @@ class SaveTestsResultController extends AbstractController
         $loggedInUser = $this->getUser();
 
         try {
-            $this->dispatchMessage(new SaveTestsResult\Command(
-                laboratoryWorkerId: $loggedInUser->id(),
-                status: $data['status'],
-                results: $data['results']
+            $this->dispatchMessage(new CreateTestsResult\Command(
+                UuidV4::v4()->toRfc4122(),
+                $loggedInUser->id()->toRfc4122(),
+                $data['userPesel']
             ));
 
             return $this->json(null);

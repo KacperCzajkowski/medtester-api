@@ -6,6 +6,7 @@ namespace App\Core\Domain\Exceptions;
 
 use App\Core\Domain\Email;
 use Exception;
+use Pesel\Pesel;
 use Symfony\Component\Uid\UuidV4;
 
 class UserNotFoundException extends Exception
@@ -21,6 +22,13 @@ class UserNotFoundException extends Exception
     {
         return new UserNotFoundException(
             sprintf('User with email %s not found', $email->value())
+        );
+    }
+
+    public static function byPesel(Pesel $userPesel): UserNotFoundException
+    {
+        return new UserNotFoundException(
+            sprintf('User with pesel %s not found', $userPesel->__toString())
         );
     }
 }

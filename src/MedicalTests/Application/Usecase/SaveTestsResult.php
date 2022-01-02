@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\MedicalTests\Application;
+namespace App\MedicalTests\Application\Usecase;
 
 use App\Core\Domain\Clock;
-use App\MedicalTests\Domain\TestsResult;
+use App\MedicalTests\Application\Exceptions\TestsResultNotFoundException;
 use App\MedicalTests\Domain\TestsResultRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -19,13 +19,10 @@ class SaveTestsResult implements MessageHandlerInterface
 
     public function __invoke(SaveTestsResult\Command $command): void
     {
-        $result = $this->repository->fetchTestsResultById($command->testId());
+        $result = $this->repository->fetchTestsResultInProgressByLabWorkerId($command->laboratoryWorkerId());
 
         if (!$result) {
-            $newTestsResult = TestsResult::fromCommandAndClock($command, $this->clock);
-            $this->repository->addNewTestsResult($newTestsResult);
-
-            return;
+            throw TestsResultNotFoundException::byLabWorkerId($command->laboratoryWorkerId());
         }
 
         $result->updateFromCommandAndClock($command, $this->clock);

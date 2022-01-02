@@ -10,5 +10,7 @@ interface TestsResultRepository
 {
     public function fetchTestsResultById(UuidV4 $id): ?TestsResult;
 
+    public function fetchTestsResultInProgressByLabWorkerId(UuidV4 $id): ?TestsResult;
+
     public function addNewTestsResult(TestsResult $newTestsResult): void;
 }

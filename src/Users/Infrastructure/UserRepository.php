@@ -9,6 +9,7 @@ use App\Users\Domain\User;
 use App\Users\Domain\UserRepository as UserRepositoryInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
+use Pesel\Pesel;
 use Symfony\Component\Uid\UuidV4;
 
 class UserRepository implements UserRepositoryInterface
@@ -44,6 +45,13 @@ class UserRepository implements UserRepositoryInterface
         return $this->manager->getRepository(User::class)->findOneBy([
             'email' => $email,
             'isActive' => true,
+        ]);
+    }
+
+    public function findByPesel(Pesel $param): ?User
+    {
+        return $this->manager->getRepository(User::class)->findOneBy([
+            'pesel' => $param,
         ]);
     }
 }

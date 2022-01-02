@@ -24,4 +24,12 @@ class TestsResultRepository implements TestsResultRepositoryInterface
     {
         $this->entityManager->persist($newTestsResult);
     }
+
+    public function fetchTestsResultInProgressByLabWorkerId(UuidV4 $id): ?TestsResult
+    {
+        return $this->entityManager->getRepository(TestsResult::class)->findOneBy([
+            'laboratoryWorkerId' => $id,
+            'status' => 'in-progress',
+        ]);
+    }
 }

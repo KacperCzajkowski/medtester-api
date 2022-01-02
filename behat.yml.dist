@@ -6,6 +6,7 @@ default:
         default:
             contexts:
                 - App\Behat\FeatureContext
+                - App\Behat\JsonContext
                 - behatch:context:browser
                 - behatch:context:system
                 - behatch:context:json
