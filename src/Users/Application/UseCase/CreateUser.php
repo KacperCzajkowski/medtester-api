@@ -64,7 +64,13 @@ class CreateUser implements MessageHandlerInterface
 
                 $newUser->setLaboratoryId($labId, $command->createdBy(), $this->clock);
             } else {
-                throw IllegalArgumentException::byInvalidDataToCreateLaboratoryWorker($command->createdBy());
+                $lab = $this->laboratoryRepository->findLaboratoryByLabWorkerIn($command->createdBy());
+
+                if (!$lab) {
+                    throw IllegalArgumentException::byInvalidDataToCreateLaboratoryWorker($command->createdBy());
+                }
+
+                $newUser->setLaboratoryId($lab->id(), $command->createdBy(), $this->clock);
             }
         }
 

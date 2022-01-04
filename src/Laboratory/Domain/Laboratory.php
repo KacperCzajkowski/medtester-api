@@ -17,4 +17,12 @@ class Laboratory
         private UuidV4 $updatedBy
     ) {
     }
+
+    /**
+     * @return UuidV4
+     */
+    public function id(): UuidV4
+    {
+        return $this->id;
+    }
 }

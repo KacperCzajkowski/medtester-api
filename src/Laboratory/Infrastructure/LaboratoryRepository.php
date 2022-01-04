@@ -6,6 +6,7 @@ namespace App\Laboratory\Infrastructure;
 
 use App\Laboratory\Domain\Laboratory;
 use App\Laboratory\Domain\LaboratoryRepository as LaboratoryRepositoryInterface;
+use App\Users\Domain\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Uid\UuidV4;
@@ -30,5 +31,16 @@ class LaboratoryRepository implements LaboratoryRepositoryInterface
     public function findLaboratoryById(UuidV4 $id): ?Laboratory
     {
         return $this->managerRegistry->getRepository(Laboratory::class)->findOneBy(['id' => $id]);
+    }
+
+    public function findLaboratoryByLabWorkerIn(UuidV4 $userId): ?Laboratory
+    {
+        $user = $this->managerRegistry->getRepository(User::class)->findOneBy(['id' => $userId]);
+
+        if (!$user) {
+            return null;
+        }
+
+        return $this->managerRegistry->getRepository(Laboratory::class)->findOneBy(['id' => $user->laboratoryId()]);
     }
 }

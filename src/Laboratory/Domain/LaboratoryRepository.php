@@ -11,4 +11,6 @@ interface LaboratoryRepository
     public function addLaboratory(Laboratory $laboratory): void;
 
     public function findLaboratoryById(UuidV4 $id): ?Laboratory;
+
+    public function findLaboratoryByLabWorkerIn(UuidV4 $userId): ?Laboratory;
 }

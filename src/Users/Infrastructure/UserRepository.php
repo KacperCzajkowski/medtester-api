@@ -7,6 +7,7 @@ namespace App\Users\Infrastructure;
 use App\Core\Domain\Email;
 use App\Users\Domain\User;
 use App\Users\Domain\UserRepository as UserRepositoryInterface;
+use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Pesel\Pesel;
@@ -50,8 +51,22 @@ class UserRepository implements UserRepositoryInterface
 
     public function findByPesel(Pesel $param): ?User
     {
-        return $this->manager->getRepository(User::class)->findOneBy([
-            'pesel' => $param,
+        /**
+         * @var Connection $connection
+         */
+        $connection = $this->manager->getConnection();
+
+        $result = $connection->fetchAssociative('
+            SELECT * FROM users WHERE pesel = :pesel AND roles::text ILIKE :role
+        ', [
+            'pesel' => $param->__toString(),
+            'role' => '%%ROLE_PATIENT%%'
         ]);
+
+        if (!$result) {
+            return null;
+        }
+
+        return User::patientFromArray($result);
     }
 }

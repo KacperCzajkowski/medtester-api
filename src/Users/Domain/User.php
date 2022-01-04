@@ -45,6 +45,24 @@ class User
     ) {
     }
 
+    public static function patientFromArray(array $result): self
+    {
+        return new User(
+            UuidV4::fromString($result['id']),
+            $result['first_name'],
+            $result['last_name'],
+            new Email($result['email']),
+            [self::ROLES['ROLE_PATIENT']],
+            new \DateTimeImmutable($result['created_at']),
+            UuidV4::fromString($result['created_by']),
+            new \DateTimeImmutable($result['updated_at']),
+            UuidV4::fromString($result['updated_by']),
+            new Pesel($result['pesel']),
+            $result['gender'],
+            (bool) $result['is_active']
+        );
+    }
+
     public function isActive(): bool
     {
         return $this->isActive;
@@ -112,6 +130,11 @@ class User
     public function removedAt(): ?\DateTimeImmutable
     {
         return $this->removedAt;
+    }
+
+    public function laboratoryId(): ?UuidV4
+    {
+        return $this->laboratoryId;
     }
 
     private function updateAuditInfo(UuidV4 $updatedBy, Clock $clock): void

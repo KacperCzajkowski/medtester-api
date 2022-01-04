@@ -46,7 +46,7 @@ class CreateTestsResultController extends AbstractController
 
             return $this->json(null);
         } catch (HandlerFailedException $exception) {
-            return $this->json(null, Response::HTTP_BAD_REQUEST);
+            return $this->json($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 }

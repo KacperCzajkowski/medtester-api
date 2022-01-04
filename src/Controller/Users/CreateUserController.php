@@ -73,7 +73,7 @@ class CreateUserController extends AbstractController
             }
 
             if ($exception->getNestedExceptionOfClass(IllegalArgumentException::class)) {
-                return $this->json(null, Response::HTTP_METHOD_NOT_ALLOWED);
+                return $this->json($exception->getMessage(), Response::HTTP_METHOD_NOT_ALLOWED);
             }
 
             throw $exception;
@@ -86,7 +86,7 @@ class CreateUserController extends AbstractController
     {
         $permissions = [
             'ROLE_PATIENT' => ['ROLE_LABORATORY_WORKER', 'ROLE_SYSTEM_ADMIN'],
-            'ROLE_LABORATORY_WORKER' => ['ROLE_SYSTEM_ADMIN'],
+            'ROLE_LABORATORY_WORKER' => ['ROLE_SYSTEM_ADMIN', 'ROLE_LABORATORY_WORKER'],
         ];
 
         return $creator->hasNecessaryRole($permissions[$newUserRole]);
