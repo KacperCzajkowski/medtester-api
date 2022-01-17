@@ -14,7 +14,8 @@ class UserDetails implements \JsonSerializable
         private \DateTimeImmutable $createdAt,
         private \DateTimeImmutable $updatedAt,
         private string $pesel,
-        private string $gender
+        private string $gender,
+        private ?LaboratoryDetails $labDetails,
     ) {
     }
 
@@ -29,6 +30,7 @@ class UserDetails implements \JsonSerializable
             new \DateTimeImmutable($result['updated_at']),
             $result['pesel'],
             $result['gender'],
+            LaboratoryDetails::fromArray($result)
         );
     }
 
@@ -43,6 +45,7 @@ class UserDetails implements \JsonSerializable
             'updatedAt' => $this->updatedAt->format('d-m-y'),
             'pesel' => $this->pesel,
             'gender' => $this->gender,
+            'labDetails' => $this->labDetails
         ];
     }
 }

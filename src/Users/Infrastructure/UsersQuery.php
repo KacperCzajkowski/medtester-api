@@ -20,12 +20,20 @@ class UsersQuery implements UsersQueryInterface
     public function fetchUserDetailsById(UuidV4 $id): ?UserDetails
     {
         $result = $this->connection()->fetchAssociative('
-            SELECT
-                email, first_name, last_name, created_at, updated_at, pesel, gender
+            SELECT usrs.email, 
+                   usrs.first_name, 
+                   usrs.last_name, 
+                   usrs.created_at, 
+                   usrs.updated_at,
+                   usrs.pesel, 
+                   usrs.gender,
+                   l.id as laboratory_id,
+                   l.name as laboratory_name,
+                   l.created_at as laboratory_created_at
             FROM
-                users
+                users usrs LEFT JOIN laboratories l on usrs.laboratory_id = l.id
             WHERE
-                id = :id
+                usrs.id = :id
         ', [
             'id' => $id->toRfc4122(),
         ]);

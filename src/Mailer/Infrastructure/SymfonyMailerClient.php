@@ -30,4 +30,20 @@ class SymfonyMailerClient implements MailingClient
 
         $this->mailer->send($email);
     }
+
+    public function sendEmailWithAttachmentStream(StreamedAttachmentEmailSchema $schema): void
+    {
+        $email = (new TemplatedEmail())
+            ->from($schema->from()->value())
+            ->to(...array_map(static fn (Email $email) => $email->value(), $schema->to()))
+            ->subject($schema->subject())
+            ->htmlTemplate($schema->properties()->path())
+            ->context($schema->properties()->params());
+
+        foreach ($schema->attachmentsStreams() as $stream) {
+            $email = $email->attach($stream['source'], $stream['name']);
+        }
+
+        $this->mailer->send($email);
+    }
 }

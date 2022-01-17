@@ -51,4 +51,41 @@ class TestsResult implements \JsonSerializable
     {
         return $this->results;
     }
+
+    /**
+     * @return UuidV4
+     */
+    public function userId(): UuidV4
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @return UuidV4
+     */
+    public function laboratoryWorkerId(): UuidV4
+    {
+        return $this->laboratoryWorkerId;
+    }
+
+    /**
+     * @return \DateTimeImmutable
+     */
+    public function createdAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function isDone(): bool
+    {
+        return $this->status === 'done';
+    }
+
+    /**
+     * @return UuidV4
+     */
+    public function id(): UuidV4
+    {
+        return $this->id;
+    }
 }

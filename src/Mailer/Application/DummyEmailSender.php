@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Mailer\Application;
 
 use App\Core\Domain\Email;
+use App\Mailer\Infrastructure\StreamedAttachmentEmailSchema;
 use App\Mailer\Infrastructure\TemplatedEmailSchema;
 use App\Mailer\Infrastructure\TemplateProperties;
 use Symfony\Component\Uid\UuidV4;
@@ -65,5 +66,21 @@ class DummyEmailSender implements EmailSender
         );
 
         $this->client->sendTemplatedEmail($schema);
+    }
+
+    public function sendEmailWithTestsResultAsPdf(UuidV4 $id): void
+    {
+        $schema = new StreamedAttachmentEmailSchema(
+            $from = new Email($this->senderEmail),
+            $to = [$emailTo],
+            $subject = 'Zmiana hasła',
+            new TemplateProperties('newPassword.html.twig', [
+                'userFirstName' => $firstName,
+                'frontendUrl' => $this->frontendUrl,
+                'newPassword' => $newPassword,
+            ])
+        );
+
+        $this->client->sendEmailWithAttachmentStream($schema);
     }
 }

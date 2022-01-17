@@ -14,4 +14,6 @@ interface EmailSender
     public function sendEmailWithActivationLink(Email $emailTo, UuidV4 $activationId, string $firstName): void;
 
     public function sentEmailWithNewPassword(Email $emailTo, string $firstName, string $newPassword): void;
+
+    public function sendEmailWithTestsResultAsPdf(UuidV4 $id): void;
 }

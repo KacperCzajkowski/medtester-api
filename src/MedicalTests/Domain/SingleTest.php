@@ -38,4 +38,20 @@ class SingleTest implements \JsonSerializable
     {
         return $this->icdCode;
     }
+
+    /**
+     * @return string
+     */
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Indicator[]
+     */
+    public function indicators(): array
+    {
+        return $this->indicators;
+    }
 }

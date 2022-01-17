@@ -6,6 +6,8 @@ namespace App\MedicalTests\Infrastructure;
 
 use App\MedicalTests\Application\Query\TestsResultQuery as TestsResultQueryInterface;
 use App\MedicalTests\Application\Query\TestsResultQuery\EditTestsResultDetails;
+use App\MedicalTests\Application\Query\TestsResultQuery\TestsResultDetails;
+use App\MedicalTests\Application\Query\TestsResultQuery\UserResult;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\UuidV4;
@@ -41,6 +43,50 @@ class TestsResultQuery implements TestsResultQueryInterface
         }
 
         return EditTestsResultDetails::fromArray($result);
+    }
+
+    public function fetchAllTestsResultsForUser(UuidV4 $userId): array
+    {
+        $results = $this->connection()->fetchAllAssociative('
+            SELECT tr.id,
+                   tr.created_at,
+                   jsonb_array_length(tr.results) as tests_count,
+                   u.first_name as laboratory_worker_first_name,
+                   u.last_name as laboratory_worker_last_name,
+                   l.name as laboratory_name
+            FROM tests_results tr 
+                INNER JOIN users u ON tr.laboratory_worker_id = u.id 
+                INNER JOIN laboratories l ON u.laboratory_id = l.id
+            WHERE tr.user_id = :userId AND tr.status != :inProgressStatus
+        ', [
+            'userId' => $userId->toRfc4122(),
+            'inProgressStatus' => 'in-progress'
+        ]);
+
+        return array_map(static fn(array $result): UserResult => UserResult::fromArray($result), $results);
+    }
+
+    public function fetchResultById(UuidV4 $id): ?TestsResultDetails
+    {
+        $result = $this->connection()->fetchAssociative('
+            SELECT tr.id,
+                   tr.created_at,
+                   tr.updated_at,
+                   tr.results,
+                   u.id as lab_worker_id,
+                   u.first_name as lab_worker_first_name,
+                   u.last_name as lab_worker_last_name,
+                   l.id as lab_id,
+                   l.name as lab_name
+            FROM tests_results tr INNER JOIN users u on tr.laboratory_worker_id = u.id
+                LEFT JOIN laboratories l on u.laboratory_id = l.id
+        ');
+
+        if (!$result) {
+            return null;
+        }
+
+        return TestsResultDetails::fromArray($result);
     }
 
     private function connection(): Connection

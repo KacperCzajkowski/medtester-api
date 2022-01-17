@@ -13,4 +13,6 @@ interface TestsResultRepository
     public function fetchTestsResultInProgressByLabWorkerId(UuidV4 $id): ?TestsResult;
 
     public function addNewTestsResult(TestsResult $newTestsResult): void;
+
+    public function getExtendedTestsResultDetails(UuidV4 $id): ExtendedTestsResultDetails;
 }

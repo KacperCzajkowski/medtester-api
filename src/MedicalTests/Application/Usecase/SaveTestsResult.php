@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\MedicalTests\Application\Usecase;
 
 use App\Core\Domain\Clock;
+use App\Mailer\Application\EmailSender;
 use App\MedicalTests\Application\Exceptions\TestsResultNotFoundException;
 use App\MedicalTests\Domain\TestsResultRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -13,7 +14,8 @@ class SaveTestsResult implements MessageHandlerInterface
 {
     public function __construct(
         private TestsResultRepository $repository,
-        private Clock $clock
+        private Clock $clock,
+        private EmailSender $emailSender
     ) {
     }
 
@@ -26,5 +28,10 @@ class SaveTestsResult implements MessageHandlerInterface
         }
 
         $result->updateFromCommandAndClock($command, $this->clock);
+
+
+        if ($result->isDone()) {
+            $this->emailSender->sendEmailWithTestsResultAsPdf($result->id());
+        }
     }
 }

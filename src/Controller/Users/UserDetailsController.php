@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Users;
 
+use App\Security\User;
 use App\Users\Application\Query\UsersQuery;
-use Pesel\Pesel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,9 +17,17 @@ class UserDetailsController extends AbstractController
     {
     }
 
+    #[Route(path: 'current-user/details', name: 'user-details', methods: ['GET'])]
     public function getUserDetails(): JsonResponse
     {
-        return $this->json(null);
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+
+        return $this->json(
+            $this->usersQuery->fetchUserDetailsById($user->id())
+        );
     }
 
     #[Route(path: 'lab-worker/users', name: 'users-to-tests', methods: ['GET'])]
@@ -32,13 +40,4 @@ class UserDetailsController extends AbstractController
             $this->usersQuery->findUsersToTestByText($query)
         );
     }
-
-    //todo testy
-//    #[Route(path: 'lab-worker/users/{pesel}', name: 'user-by-pesel', methods: ['GET'])]
-//    public function getUserByPesel(string $pesel): JsonResponse
-//    {
-//        return $this->json(
-//            $this->usersQuery->findPatientByPesel(new Pesel($pesel))
-//        );
-//    }
 }
