@@ -8,6 +8,7 @@ use App\Core\Domain\Clock;
 use App\Mailer\Application\EmailSender;
 use App\MedicalTests\Application\Exceptions\TestsResultNotFoundException;
 use App\MedicalTests\Domain\TestsResultRepository;
+use App\Users\Domain\UserRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class SaveTestsResult implements MessageHandlerInterface
@@ -15,7 +16,8 @@ class SaveTestsResult implements MessageHandlerInterface
     public function __construct(
         private TestsResultRepository $repository,
         private Clock $clock,
-        private EmailSender $emailSender
+        private EmailSender $emailSender,
+        private UserRepository $userRepository
     ) {
     }
 
@@ -31,7 +33,8 @@ class SaveTestsResult implements MessageHandlerInterface
 
 
         if ($result->isDone()) {
-            $this->emailSender->sendEmailWithTestsResultAsPdf($result->id());
+            $user = $this->userRepository->findUserById($result->userId());
+            $this->emailSender->sendEmailWithTestsResultAsPdf($result->id(), $user->email(), $user->firstName());
         }
     }
 }

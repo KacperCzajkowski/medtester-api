@@ -8,6 +8,10 @@ use App\Core\Domain\Clock;
 use App\Core\Domain\SystemId;
 use App\Laboratory\Domain\Laboratory;
 use App\Laboratory\Domain\LaboratoryRepository;
+use App\MedicalTests\Domain\Indicator;
+use App\MedicalTests\Domain\ReferenceRange;
+use App\MedicalTests\Domain\TestTemplate;
+use App\MedicalTests\Domain\TestTemplateRepository;
 use App\Security\User;
 use App\Users\Application\UseCase\ActivateUser;
 use App\Users\Application\UseCase\ChangePassword;
@@ -36,6 +40,7 @@ class AppFixtures extends Fixture
         private UserPasswordHasherInterface $passwordHasher,
         private UserRepository $userRepository,
         private LaboratoryRepository $laboratoryRepository,
+        private TestTemplateRepository $templateRepository,
         private Clock $clock
     ) {
     }
@@ -45,6 +50,7 @@ class AppFixtures extends Fixture
         $this->addPatients();
         $this->addLaboratories();
         $this->addLabWorkers();
+        $this->addTemplates();
         $manager->flush();
     }
 
@@ -223,5 +229,122 @@ class AppFixtures extends Fixture
             updatedAt: $this->clock->currentDateTime(),
             updatedBy: SystemId::asUuidV4()
         ));
+    }
+
+    private function addTemplates(): void
+    {
+        $tmp = new TestTemplate(
+            UuidV4::v4(),
+            'Morfologia',
+            'ICD-9: C55',
+            new \DateTimeImmutable(),
+            [
+                new Indicator(
+                    'Leukocyty',
+                    0,
+                    'tys./μl',
+                    new ReferenceRange(
+                        4.20,
+                        9.00
+                    )
+                ),
+                new Indicator(
+                    'Erytrocyty',
+                    0,
+                    'mln./μl',
+                    new ReferenceRange(
+                        4.60,
+                        6.10
+                    )
+                ),
+                new Indicator(
+                    'Hemoglobina',
+                    0,
+                    'g/dl',
+                    new ReferenceRange(
+                        13.70,
+                        17.50
+                    )
+                )
+            ]
+        );
+
+        $this->templateRepository->add($tmp);
+
+        $tmp = new TestTemplate(
+            UuidV4::v4(),
+            'Badanie ogólne moczu',
+            'ICD-9: A01',
+            new \DateTimeImmutable(),
+            [
+                new Indicator(
+                    'Ciężar właściwy',
+                    0,
+                    'g/ml',
+                    new ReferenceRange(
+                        1.015,
+                        1.03
+                    )
+                ),
+                new Indicator(
+                    'pH',
+                    0,
+                    '-',
+                    new ReferenceRange(
+                        4.80,
+                        7.40
+                    )
+                )
+            ]
+        );
+
+        $this->templateRepository->add($tmp);
+
+        $tmp = new TestTemplate(
+            UuidV4::v4(),
+            'Próba wątrobowa',
+            'ICD-10: R94.5',
+            new \DateTimeImmutable(),
+            [
+                new Indicator(
+                    'Bilirubina całkowita (BIL)',
+                    0,
+                    'mg/dl',
+                    new ReferenceRange(
+                        0.0,
+                        1.1
+                    )
+                ),
+                new Indicator(
+                    'Aminotransferaza alaninowa (ALT)',
+                    0,
+                    'U/I',
+                    new ReferenceRange(
+                        10.0,
+                        31.0
+                    )
+                ),
+                new Indicator(
+                    'Aminotransferaza asparaginowa (AST)',
+                    0,
+                    'U/I',
+                    new ReferenceRange(
+                        10.0,
+                        37.0
+                    )
+                ),
+                new Indicator(
+                    'Aminotransferaza asparaginowa (AST)',
+                    0,
+                    'U/I',
+                    new ReferenceRange(
+                        0.0,
+                        115.0
+                    )
+                )
+            ]
+        );
+
+        $this->templateRepository->add($tmp);
     }
 }

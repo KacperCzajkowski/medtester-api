@@ -15,5 +15,5 @@ interface EmailSender
 
     public function sentEmailWithNewPassword(Email $emailTo, string $firstName, string $newPassword): void;
 
-    public function sendEmailWithTestsResultAsPdf(UuidV4 $id): void;
+    public function sendEmailWithTestsResultAsPdf(UuidV4 $id, Email $emailTo, string $firstName): void;
 }

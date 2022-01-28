@@ -1,0 +1,12 @@
+<?php
+
+namespace App\MedicalTests\Domain;
+
+use Symfony\Component\Uid\UuidV4;
+
+interface TestTemplateRepository
+{
+    public function findTemplateById(UuidV4 $templateId): ?TestTemplate;
+
+    public function add(TestTemplate $template): void;
+}

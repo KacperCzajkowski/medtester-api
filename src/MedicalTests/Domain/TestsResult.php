@@ -88,4 +88,9 @@ class TestsResult implements \JsonSerializable
     {
         return $this->id;
     }
+
+    public function addNewSingleTest(SingleTest $fromTemplate): void
+    {
+        $this->results[] = $fromTemplate;
+    }
 }

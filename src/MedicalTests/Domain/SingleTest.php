@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\MedicalTests\Domain;
 
+use JetBrains\PhpStorm\Pure;
+
 class SingleTest implements \JsonSerializable
 {
     /**
@@ -14,6 +16,16 @@ class SingleTest implements \JsonSerializable
         private string $icdCode,
         private array $indicators
     ) {
+    }
+
+    #[Pure]
+    public static function fromTemplate(TestTemplate $template): SingleTest
+    {
+        return new SingleTest(
+            $template->name(),
+            $template->icdCode(),
+            $template->hardcodedIndicators()
+        );
     }
 
     public function jsonSerialize(): array

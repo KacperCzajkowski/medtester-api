@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\MedicalTests\Domain\TestTemplate" table="tests_templates">
+        <id name="id" type="uuid" column="id">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="name" type="text" column="name"/>
+        <field name="icdCode" type="text" column="icd_code"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+        <field name="hardcodedIndicators" type="indicators_array" column="results"/>
+    </entity>
+</doctrine-mapping>

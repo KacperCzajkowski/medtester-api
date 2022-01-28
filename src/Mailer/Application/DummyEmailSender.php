@@ -8,6 +8,8 @@ use App\Core\Domain\Email;
 use App\Mailer\Infrastructure\StreamedAttachmentEmailSchema;
 use App\Mailer\Infrastructure\TemplatedEmailSchema;
 use App\Mailer\Infrastructure\TemplateProperties;
+use App\MedicalTests\Application\Query\TestsResultQuery;
+use App\MedicalTests\Infrastructure\TestsResultPdfGenerator;
 use Symfony\Component\Uid\UuidV4;
 
 class DummyEmailSender implements EmailSender
@@ -15,7 +17,8 @@ class DummyEmailSender implements EmailSender
     public function __construct(
         private MailingClient $client,
         private string $senderEmail,
-        private string $frontendUrl
+        private string $frontendUrl,
+        private TestsResultPdfGenerator $generator
     ) {
     }
 
@@ -68,17 +71,23 @@ class DummyEmailSender implements EmailSender
         $this->client->sendTemplatedEmail($schema);
     }
 
-    public function sendEmailWithTestsResultAsPdf(UuidV4 $id): void
+    public function sendEmailWithTestsResultAsPdf(UuidV4 $id, Email $emailTo, string $firstName): void
     {
+        $output = $this->generator->getTestsResultAsPdfOutput($id);
+
         $schema = new StreamedAttachmentEmailSchema(
             $from = new Email($this->senderEmail),
             $to = [$emailTo],
-            $subject = 'Zmiana hasła',
-            new TemplateProperties('newPassword.html.twig', [
+            $subject = 'Nowe badanie',
+            new TemplateProperties('newResult.html.twig', [
                 'userFirstName' => $firstName,
-                'frontendUrl' => $this->frontendUrl,
-                'newPassword' => $newPassword,
-            ])
+            ]),
+            [
+                [
+                    'source' => $output,
+                    'name' => sprintf('%s.pdf', $emailTo->value())
+                ]
+            ]
         );
 
         $this->client->sendEmailWithAttachmentStream($schema);

@@ -47,19 +47,43 @@ class UsersQuery implements UsersQueryInterface
 
     public function findUsersToTestByText(string $text): array
     {
-        $result = $this->connection()->fetchAllAssociative('
-            SELECT first_name, last_name, pesel
-            FROM users 
-            WHERE (first_name ILIKE :text OR 
+        $queryBuilder = $this->connection()->createQueryBuilder();
+
+        $queryBuilder
+            ->addSelect([
+            'u.first_name',
+            'u.last_name',
+            'u.pesel',])
+            ->from('users', 'u')
+            ->andWhere('u.roles::text ILIKE :roles')
+            ->setParameter('roles', sprintf('%%%s%%', 'ROLE_PATIENT'));
+
+        $splittedText = explode(' ', $text);
+
+        foreach ($splittedText as $fragment) {
+            $queryBuilder
+                ->andWhere('
+                (first_name ILIKE :text OR 
                    last_name ILIKE :text OR 
-                   pesel LIKE :text) AND 
-                  roles::text ILIKE :role AND
-                  removed_at IS NULL
-            ORDER BY created_at
-        ', [
-            'text' => sprintf('%%%s%%', $text),
-            'role' => sprintf('%%%s%%', 'ROLE_PATIENT'),
-        ]);
+                   pesel LIKE :text)')
+                ->setParameter('text', sprintf('%%%s%%', $fragment));
+        }
+//
+//        $result = $this->connection()->fetchAllAssociative('
+//            SELECT first_name, last_name, pesel
+//            FROM users
+//            WHERE (first_name ILIKE :text OR
+//                   last_name ILIKE :text OR
+//                   pesel LIKE :text) AND
+//                  roles::text ILIKE :role AND
+//                  removed_at IS NULL
+//            ORDER BY created_at
+//        ', [
+//            'text' => sprintf('%%%s%%', $text),
+//            'role' => sprintf('%%%s%%', 'ROLE_PATIENT'),
+//        ]);
+
+        $result = $queryBuilder->execute()->fetchAllAssociative();
 
         return array_map(static fn (array $array): BasicUserInfo => BasicUserInfo::fromArray($array), $result);
     }
