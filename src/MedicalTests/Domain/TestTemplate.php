@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\MedicalTests\Domain;
 
 use Symfony\Component\Uid\UuidV4;
@@ -15,8 +17,8 @@ class TestTemplate implements \JsonSerializable
         private string $icdCode,
         private \DateTimeImmutable $createdAt,
         private array $hardcodedIndicators
-    ) {}
-
+    ) {
+    }
 
     public function jsonSerialize(): array
     {
@@ -25,7 +27,7 @@ class TestTemplate implements \JsonSerializable
             'name' => $this->name,
             'icdCode' => $this->icdCode,
             'createdAt' => $this->createdAt,
-            'hardcodedIndicators' => $this->hardcodedIndicators
+            'hardcodedIndicators' => $this->hardcodedIndicators,
         ];
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\MedicalTests\Application\Usecase;
 
 use App\MedicalTests\Domain\SingleTest;
@@ -13,8 +15,7 @@ class AddTemplateToResult implements MessageHandlerInterface
     public function __construct(
         private TestTemplateRepository $templateRepository,
         private TestsResultRepository $testsResultRepository
-    )
-    {
+    ) {
     }
 
     public function __invoke(AddTemplateToResult\Command $command): void

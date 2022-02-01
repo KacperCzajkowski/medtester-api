@@ -10,8 +10,7 @@ class LaboratoryDetails implements \JsonSerializable
         private string $id,
         private string $name,
         private \DateTimeImmutable $createdAt
-    )
-    {
+    ) {
     }
 
     public static function fromArray(array $result): ?LaboratoryDetails
@@ -32,7 +31,7 @@ class LaboratoryDetails implements \JsonSerializable
         return [
             'laboratoryId' => $this->id,
             'laboratoryName' => $this->name,
-            'laboratoryCreatedAt' => $this->createdAt->format('d-m-y')
+            'laboratoryCreatedAt' => $this->createdAt->format('d-m-y'),
         ];
     }
 

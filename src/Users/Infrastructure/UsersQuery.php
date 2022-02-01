@@ -53,7 +53,7 @@ class UsersQuery implements UsersQueryInterface
             ->addSelect([
             'u.first_name',
             'u.last_name',
-            'u.pesel',])
+            'u.pesel', ])
             ->from('users', 'u')
             ->andWhere('u.roles::text ILIKE :roles')
             ->setParameter('roles', sprintf('%%%s%%', 'ROLE_PATIENT'));
@@ -68,20 +68,6 @@ class UsersQuery implements UsersQueryInterface
                    pesel LIKE :text)')
                 ->setParameter('text', sprintf('%%%s%%', $fragment));
         }
-//
-//        $result = $this->connection()->fetchAllAssociative('
-//            SELECT first_name, last_name, pesel
-//            FROM users
-//            WHERE (first_name ILIKE :text OR
-//                   last_name ILIKE :text OR
-//                   pesel LIKE :text) AND
-//                  roles::text ILIKE :role AND
-//                  removed_at IS NULL
-//            ORDER BY created_at
-//        ', [
-//            'text' => sprintf('%%%s%%', $text),
-//            'role' => sprintf('%%%s%%', 'ROLE_PATIENT'),
-//        ]);
 
         $result = $queryBuilder->execute()->fetchAllAssociative();
 

@@ -31,7 +31,6 @@ class SaveTestsResult implements MessageHandlerInterface
 
         $result->updateFromCommandAndClock($command, $this->clock);
 
-
         if ($result->isDone()) {
             $user = $this->userRepository->findUserById($result->userId());
             $this->emailSender->sendEmailWithTestsResultAsPdf($result->id(), $user->email(), $user->firstName());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\MedicalTests\Application\Query\TestTemplateQuery;
 
 class TestTemplateDetails implements \JsonSerializable
@@ -8,8 +10,7 @@ class TestTemplateDetails implements \JsonSerializable
         private string $id,
         private string $name,
         private string $icdCode
-    )
-    {
+    ) {
     }
 
     public static function fromArray(array $result): TestTemplateDetails
@@ -26,7 +27,7 @@ class TestTemplateDetails implements \JsonSerializable
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'icdCode' => $this->icdCode
+            'icdCode' => $this->icdCode,
         ];
     }
 }

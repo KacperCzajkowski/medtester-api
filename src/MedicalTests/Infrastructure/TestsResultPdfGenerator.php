@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\MedicalTests\Infrastructure;
 
 use App\MedicalTests\Domain\TestsResultRepository;
-use App\Users\Domain\UserRepository;
 use Knp\Snappy\Pdf;
 use Symfony\Component\Uid\UuidV4;
 use Twig\Environment;
@@ -16,7 +15,8 @@ class TestsResultPdfGenerator
         private Pdf $pdf,
         private Environment $twig,
         private TestsResultRepository $testsResultRepository
-    ) {}
+    ) {
+    }
 
     public function getTestsResultAsPdfOutput(UuidV4 $testId): string
     {
@@ -26,7 +26,7 @@ class TestsResultPdfGenerator
             'user' => $test->userDetails(),
             'all_tests' => $test->results(),
             'lab' => $test->laboratoryDetails(),
-            'testDetails' => $test
+            'testDetails' => $test,
         ]);
 
         return $this->pdf->getOutputFromHtml($content);

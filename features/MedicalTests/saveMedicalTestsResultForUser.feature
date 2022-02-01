@@ -16,11 +16,16 @@ Feature: As a user I want to fetch all my tests results
     Given "kacper@lab.pl" is logged in using "test1234" password
     And I add "Content-Type" header equal to "application/json"
     And I add "Accept" header equal to "application/json"
-    When I send a "POST" request to "/lab-worker/test" with body:
+    When I send a "POST" request to "/lab-worker/test/create" with JSON headers and body:
     """
     {
-      "testId": null,
-      "userId": "c61b9a21-d30d-4ec4-a193-63821acf5e81",
+      "userPesel": "84101144272"
+    }
+    """
+    And the response status code should be 200
+    Then I send a "POST" request to "/lab-worker/test" with JSON headers and body:
+    """
+    {
       "status": "in-progress",
       "results": [
         {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\MedicalTests\Infrastructure;
 
 use App\MedicalTests\Domain\TestTemplate;
@@ -11,11 +13,13 @@ class TestTemplateRepository implements TestTemplateRepositoryInterface
 {
     public function __construct(
         private EntityManagerInterface $entityManager
-    ) {}
+    ) {
+    }
+
     public function findTemplateById(UuidV4 $templateId): ?TestTemplate
     {
         return $this->entityManager->getRepository(TestTemplate::class)->findOneBy([
-            'id' => $templateId
+            'id' => $templateId,
         ]);
     }
 

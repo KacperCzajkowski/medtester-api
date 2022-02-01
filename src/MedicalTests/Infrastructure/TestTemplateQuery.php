@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\MedicalTests\Infrastructure;
 
 use App\MedicalTests\Application\Query\TestTemplateQuery as TestTemplateQueryInterface;
@@ -10,7 +12,8 @@ class TestTemplateQuery implements TestTemplateQueryInterface
 {
     public function __construct(
         private EntityManagerInterface $entityManager
-    ) {}
+    ) {
+    }
 
     public function fetchAll(): array
     {
@@ -19,6 +22,6 @@ class TestTemplateQuery implements TestTemplateQueryInterface
             FROM tests_templates
         ');
 
-        return array_map(static fn(array $tmp): TestTemplateDetails => TestTemplateDetails::fromArray($tmp), $result);
+        return array_map(static fn (array $tmp): TestTemplateDetails => TestTemplateDetails::fromArray($tmp), $result);
     }
 }

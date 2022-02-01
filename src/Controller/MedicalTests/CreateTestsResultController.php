@@ -17,8 +17,6 @@ use Symfony\Component\Uid\UuidV4;
 
 class CreateTestsResultController extends AbstractController
 {
-    //todo testy
-
     #[Route(path: '/lab-worker/test/create', name: 'tests-result-creating', methods: 'POST')]
     public function activateUser(Request $request): JsonResponse
     {

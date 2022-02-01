@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\MedicalTests;
 
 use App\MedicalTests\Infrastructure\TestsResultPdfGenerator;
@@ -12,7 +14,8 @@ class DownloadTestsResultAsPdfController extends AbstractController
 {
     public function __construct(
         private TestsResultPdfGenerator $generator
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/current-user/test/{id}/pdf', name: 'tests-result-pdf-send', methods: 'POST')]
     public function activateUser(string $id): PdfResponse

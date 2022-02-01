@@ -51,9 +51,6 @@ class SingleTest implements \JsonSerializable
         return $this->icdCode;
     }
 
-    /**
-     * @return string
-     */
     public function name(): string
     {
         return $this->name;

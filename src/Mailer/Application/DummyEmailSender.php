@@ -8,7 +8,6 @@ use App\Core\Domain\Email;
 use App\Mailer\Infrastructure\StreamedAttachmentEmailSchema;
 use App\Mailer\Infrastructure\TemplatedEmailSchema;
 use App\Mailer\Infrastructure\TemplateProperties;
-use App\MedicalTests\Application\Query\TestsResultQuery;
 use App\MedicalTests\Infrastructure\TestsResultPdfGenerator;
 use Symfony\Component\Uid\UuidV4;
 
@@ -85,8 +84,8 @@ class DummyEmailSender implements EmailSender
             [
                 [
                     'source' => $output,
-                    'name' => sprintf('%s.pdf', $emailTo->value())
-                ]
+                    'name' => sprintf('%s.pdf', $emailTo->value()),
+                ],
             ]
         );
 

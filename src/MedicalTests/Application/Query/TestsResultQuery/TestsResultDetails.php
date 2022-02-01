@@ -15,7 +15,8 @@ class TestsResultDetails implements \JsonSerializable
         private \DateTimeImmutable $updatedAt,
         private LaboratoryWorkerDetails $labWorkerDetails,
         private array $results
-    ) {}
+    ) {
+    }
 
     public function jsonSerialize(): array
     {
@@ -24,7 +25,7 @@ class TestsResultDetails implements \JsonSerializable
             'createdAt' => $this->createdAt->format('d-m-y'),
             'updatedAt' => $this->updatedAt->format('d-m-y'),
             'labWorkerDetails' => $this->labWorkerDetails,
-            'results' => $this->results
+            'results' => $this->results,
         ];
     }
 
@@ -37,7 +38,7 @@ class TestsResultDetails implements \JsonSerializable
             new \DateTimeImmutable($result['created_at']),
             new \DateTimeImmutable($result['updated_at']),
             LaboratoryWorkerDetails::fromArray($result),
-            array_map(static fn(array $singleTest): SingleTest => SingleTest::fromArray($singleTest), $tests)
+            array_map(static fn (array $singleTest): SingleTest => SingleTest::fromArray($singleTest), $tests)
         );
     }
 }

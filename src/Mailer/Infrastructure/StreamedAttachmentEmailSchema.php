@@ -21,9 +21,6 @@ class StreamedAttachmentEmailSchema
     ) {
     }
 
-    /**
-     * @return Email
-     */
     public function from(): Email
     {
         return $this->from;
@@ -37,17 +34,11 @@ class StreamedAttachmentEmailSchema
         return $this->to;
     }
 
-    /**
-     * @return string
-     */
     public function subject(): string
     {
         return $this->subject;
     }
 
-    /**
-     * @return TemplateProperties
-     */
     public function properties(): TemplateProperties
     {
         return $this->properties;

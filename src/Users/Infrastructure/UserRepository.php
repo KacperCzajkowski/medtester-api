@@ -60,7 +60,7 @@ class UserRepository implements UserRepositoryInterface
             SELECT * FROM users WHERE pesel = :pesel AND roles::text ILIKE :role
         ', [
             'pesel' => $param->__toString(),
-            'role' => '%%ROLE_PATIENT%%'
+            'role' => '%%ROLE_PATIENT%%',
         ]);
 
         if (!$result) {

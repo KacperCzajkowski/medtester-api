@@ -30,7 +30,7 @@ class TestsResultQueryController extends AbstractController
             $this->resultQuery->findTestsResultInProgressByLabWorkerId($loggedInUser->id())
         );
     }
-//todo testy
+
     #[Route(path: '/current-user/results', name: 'all-tests-results', methods: 'GET')]
     public function fetchMyLabDetails(): JsonResponse
     {
@@ -43,7 +43,7 @@ class TestsResultQueryController extends AbstractController
             $this->resultQuery->fetchAllTestsResultsForUser($user->id())
         );
     }
-//todo test
+
     #[Route(path: '/current-user/results/{resultId}', name: 'single-result-details', methods: 'GET')]
     public function fetchSingleResultDetails(string $resultId): JsonResponse
     {

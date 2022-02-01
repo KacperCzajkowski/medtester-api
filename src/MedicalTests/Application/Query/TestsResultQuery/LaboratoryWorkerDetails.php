@@ -12,17 +12,16 @@ class LaboratoryWorkerDetails implements \JsonSerializable
         private string $lastName,
         private string $labId,
         private string $labName
-    )
-    {
+    ) {
     }
 
     public function jsonSerialize(): array
     {
         return [
             'labWorkerId' => $this->labWorkerId,
-            'fullName' => sprintf('%s %s',$this->firstName, $this->lastName),
+            'fullName' => sprintf('%s %s', $this->firstName, $this->lastName),
             'labName' => $this->labName,
-            'labId' => $this->labId
+            'labId' => $this->labId,
         ];
     }
 

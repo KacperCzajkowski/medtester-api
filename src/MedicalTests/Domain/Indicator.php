@@ -13,9 +13,7 @@ class Indicator implements \JsonSerializable
         private ReferenceRange $referenceRange
     ) {
     }
-    /**
-     * @return ReferenceRange
-     */
+
     public function referenceRange(): ReferenceRange
     {
         return $this->referenceRange;
@@ -41,25 +39,16 @@ class Indicator implements \JsonSerializable
         );
     }
 
-    /**
-     * @return string
-     */
     public function name(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return float
-     */
     public function result(): float
     {
         return $this->result;
     }
 
-    /**
-     * @return string
-     */
     public function unit(): string
     {
         return $this->unit;

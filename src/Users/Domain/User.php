@@ -132,25 +132,16 @@ class User
         return $this->removedAt;
     }
 
-    /**
-     * @return string
-     */
     public function lastName(): string
     {
         return $this->lastName;
     }
 
-    /**
-     * @return Pesel
-     */
     public function pesel(): Pesel
     {
         return $this->pesel;
     }
 
-    /**
-     * @return string
-     */
     public function gender(): string
     {
         return $this->gender;

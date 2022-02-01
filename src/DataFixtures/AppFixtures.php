@@ -265,7 +265,7 @@ class AppFixtures extends Fixture
                         13.70,
                         17.50
                     )
-                )
+                ),
             ]
         );
 
@@ -294,7 +294,7 @@ class AppFixtures extends Fixture
                         4.80,
                         7.40
                     )
-                )
+                ),
             ]
         );
 
@@ -341,7 +341,7 @@ class AppFixtures extends Fixture
                         0.0,
                         115.0
                     )
-                )
+                ),
             ]
         );
 

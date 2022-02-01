@@ -17,7 +17,6 @@ class CheckResultStatusController extends AbstractController
     {
     }
 
-    //todo testy
     #[Route(path: '/lab-worker/check', name: 'tests-result-check', methods: 'GET')]
     public function activateUser(Request $request): JsonResponse
     {

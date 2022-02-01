@@ -35,7 +35,7 @@ class SecurityController extends AbstractController
         $result = [
             'id' => $user->id()->toRfc4122(),
             'email' => $user->getUsername(),
-            'roles' => $user->getRoles()
+            'roles' => $user->getRoles(),
         ];
 
         return $this->json($result, $this->getUser() ? 200 : 403);

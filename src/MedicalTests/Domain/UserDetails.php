@@ -15,7 +15,8 @@ class UserDetails
         private Email $email,
         private Pesel $pesel,
         private string $gender
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $result): UserDetails
     {
@@ -28,41 +29,26 @@ class UserDetails
         );
     }
 
-    /**
-     * @return string
-     */
     public function firstName(): string
     {
         return $this->firstName;
     }
 
-    /**
-     * @return string
-     */
     public function lastName(): string
     {
         return $this->lastName;
     }
 
-    /**
-     * @return Email
-     */
     public function email(): Email
     {
         return $this->email;
     }
 
-    /**
-     * @return Pesel
-     */
     public function pesel(): Pesel
     {
         return $this->pesel;
     }
 
-    /**
-     * @return string
-     */
     public function gender(): string
     {
         return $this->gender;

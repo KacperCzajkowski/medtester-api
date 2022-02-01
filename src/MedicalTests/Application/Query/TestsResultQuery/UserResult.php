@@ -12,7 +12,8 @@ class UserResult implements \JsonSerializable
         private string $labName,
         private \DateTimeImmutable $createdAt,
         private int $testsCount
-    ) {}
+    ) {
+    }
 
     public function jsonSerialize(): array
     {
@@ -21,7 +22,7 @@ class UserResult implements \JsonSerializable
             'labWorkerFullName' => $this->labWorkerFullName,
             'labName' => $this->labName,
             'createdAt' => $this->createdAt->format('d-m-y'),
-            'testsCount' => $this->testsCount
+            'testsCount' => $this->testsCount,
         ];
     }
 

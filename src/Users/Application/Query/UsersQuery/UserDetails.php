@@ -45,7 +45,7 @@ class UserDetails implements \JsonSerializable
             'updatedAt' => $this->updatedAt->format('d-m-y'),
             'pesel' => $this->pesel,
             'gender' => $this->gender,
-            'labDetails' => $this->labDetails
+            'labDetails' => $this->labDetails,
         ];
     }
 }

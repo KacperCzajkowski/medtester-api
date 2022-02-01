@@ -13,7 +13,8 @@ class LaboratoryDetails
         private string $labWorkerFullName,
         private UuidV4 $laboratoryId,
         private string $labName
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $result): LaboratoryDetails
     {
@@ -23,36 +24,23 @@ class LaboratoryDetails
             UuidV4::fromString($result['lab_id']),
             $result['lab_name']
         );
-
     }
 
-    /**
-     * @return UuidV4
-     */
     public function labWorkerId(): UuidV4
     {
         return $this->labWorkerId;
     }
 
-    /**
-     * @return string
-     */
     public function labWorkerFullName(): string
     {
         return $this->labWorkerFullName;
     }
 
-    /**
-     * @return UuidV4
-     */
     public function laboratoryId(): UuidV4
     {
         return $this->laboratoryId;
     }
 
-    /**
-     * @return string
-     */
     public function labName(): string
     {
         return $this->labName;

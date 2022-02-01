@@ -60,10 +60,10 @@ class TestsResultQuery implements TestsResultQueryInterface
             WHERE tr.user_id = :userId AND tr.status != :inProgressStatus
         ', [
             'userId' => $userId->toRfc4122(),
-            'inProgressStatus' => 'in-progress'
+            'inProgressStatus' => 'in-progress',
         ]);
 
-        return array_map(static fn(array $result): UserResult => UserResult::fromArray($result), $results);
+        return array_map(static fn (array $result): UserResult => UserResult::fromArray($result), $results);
     }
 
     public function fetchResultById(UuidV4 $id): ?TestsResultDetails

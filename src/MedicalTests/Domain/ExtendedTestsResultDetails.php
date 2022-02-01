@@ -17,11 +17,9 @@ class ExtendedTestsResultDetails
         private LaboratoryDetails $laboratoryDetails,
         private UserDetails $userDetails,
         private array $results
-    ) {}
+    ) {
+    }
 
-    /**
-     * @return string
-     */
     public function id(): string
     {
         return $this->id->toRfc4122();
@@ -32,17 +30,11 @@ class ExtendedTestsResultDetails
         return $this->createdAt->format('h:m d-m-Y');
     }
 
-    /**
-     * @return LaboratoryDetails
-     */
     public function laboratoryDetails(): LaboratoryDetails
     {
         return $this->laboratoryDetails;
     }
 
-    /**
-     * @return UserDetails
-     */
     public function userDetails(): UserDetails
     {
         return $this->userDetails;

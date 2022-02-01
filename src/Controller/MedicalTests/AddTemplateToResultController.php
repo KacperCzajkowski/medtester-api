@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\MedicalTests;
 
 use App\MedicalTests\Application\Query\TestTemplateQuery;
@@ -18,7 +20,6 @@ class AddTemplateToResultController extends AbstractController
     {
     }
 
-    //todo testy
     #[Route(path: '/lab-worker/test/add/{templateId}', name: 'tests-result-template-add', methods: 'POST')]
     public function addTemplateToResult(string $templateId, Request $request): JsonResponse
     {
@@ -39,7 +40,6 @@ class AddTemplateToResultController extends AbstractController
         }
     }
 
-    //todo testy
     #[Route(path: '/lab-worker/test/templates', name: 'tests-result-template-list', methods: 'GET')]
     public function fetchAllTemplates(Request $request): JsonResponse
     {

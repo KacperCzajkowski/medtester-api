@@ -11,7 +11,6 @@ use App\MedicalTests\Domain\TestsResultRepository;
 use App\Users\Domain\UserRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-//todo test
 class CreateTestsResult implements MessageHandlerInterface
 {
     public function __construct(
