@@ -11,7 +11,7 @@ final class Version20220120084642 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Creating tests_templates tabke';
+        return 'Creating tests_templates table';
     }
 
     public function up(Schema $schema): void

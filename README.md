@@ -33,3 +33,6 @@ hasło: test1234
 Pracownik laboratorium:
 email: kacper@lab.pl
 hasło: test1234
+
+Konfiguracja serwera pocztowego:
+W celu konfiguracji serwera pocztowego należy wypełnić zmienną MAILER_DNS w pliku .env.
